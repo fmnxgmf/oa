@@ -1,0 +1,22 @@
+server:
+  port: 8010
+spring:
+  redis:
+    host: 120.79.23.95
+    port: 6379
+    password: gmf123
+  datasource:
+    url: dbc:mysql://localhost:3306/oa
+    username: root
+    password: gmf123
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+fdfs:
+  so-timeout: 2500
+  connect-timeout: 600
+  thumb-image:  #缩略图
+    width: 60
+    height: 60
+  tracker-list: # tracker地址
+    - 120.79.23.95:22122
