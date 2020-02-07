@@ -1,9 +1,12 @@
 package cn.fmnx.oa;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
+@MapperScan("cn.fmnx.oa.mapper")
 public class OaApplication {
 
     public static void main(String[] args) {

@@ -26,7 +26,7 @@ public class SwaggerConfig {
                 .pathMapping("/")
                 .select()
                 // 扫描的路径包
-                .apis(RequestHandlerSelectors.basePackage("com.example.swagger.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cn.fmnx.oa.contoller"))
                 .paths(PathSelectors.any())
                 .build().apiInfo(new ApiInfoBuilder()
                         .title("swagger后端接口文档")

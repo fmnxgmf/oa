@@ -6,12 +6,14 @@ spring:
     port: 6379
     password: gmf123
   datasource:
-    url: dbc:mysql://localhost:3306/oa
+    url: jdbc:mysql://localhost:3306/oasys
     username: root
     password: gmf123
+    driver-class-name: com.mysql.jdbc.Driver
     hikari:
       maximum-pool-size: 30
       minimum-idle: 10
+
 fdfs:
   so-timeout: 2500
   connect-timeout: 600
@@ -20,3 +22,24 @@ fdfs:
     height: 60
   tracker-list: # tracker地址
     - 120.79.23.95:22122
+#showSql
+logging:
+  level:
+    cn:
+      fmnx:
+        oa:
+          mapper: debug
+ #开启驼峰映射的配置信息
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+mapper:
+  identity: MYSQL
+oa:
+  jwt:
+    secret: oa@Login(Auth}*^31)&yun6%f3q2 # 登录校验的密钥
+    pubKeyPath: \\rsa\\rsa.pub # 公钥地址
+    priKeyPath: \\rsa\\rsa.pri # 私钥地址
+    expire: 30 # 过期时间,单位分钟
+    cookieName: OA_TOKEN
+
