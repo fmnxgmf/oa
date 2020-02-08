@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * @Version V1.0
  **/
 @Data
-@Table(name = "oa_role_power")
+@Table(name = "aoa_role_power_list")
 public class Rolepowerlist {
     @Id
     @KeySql(useGeneratedKeys = true)

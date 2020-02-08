@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
  * @Version V1.0
  **/
 @Data
-@Table(name = "oa_menu")
+@Table(name = "aoa_sys_menu")
 public class Menu {
 
     @Id

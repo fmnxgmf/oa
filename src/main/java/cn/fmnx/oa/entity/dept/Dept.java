@@ -17,7 +17,7 @@ import java.util.Date;
  * @Date 2020/2/5
  * @Version V1.0
  **/
-@Table(name = "oa_dept")
+@Table(name = "aoa_dept")
 @Data
 public class Dept {
     /**

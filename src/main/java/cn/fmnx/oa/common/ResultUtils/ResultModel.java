@@ -1,6 +1,8 @@
 package cn.fmnx.oa.common.ResultUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,23 +15,28 @@ import java.io.Serializable;
  * @modified By:
  */
 @Data
+@ApiModel
 public class ResultModel implements Serializable {
     //定义jackson对象
     private static final ObjectMapper mapper = new ObjectMapper();
 
     //响应业务状态码
+    @ApiModelProperty(value = "返回的状态码",example = "200")
     private Integer code;
 
     // 响应消息
+    @ApiModelProperty(value = "返回响应消息")
     private String msg;
 
     /**
      * 返回数据量
      */
+    @ApiModelProperty(value = "返回的数据量")
     private Long count;
 
 
     // 返回内容
+    @ApiModelProperty(value = "返回的内容")
     private Object content;
 
     public ResultModel(){}

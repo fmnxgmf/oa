@@ -6,6 +6,7 @@ import cn.fmnx.oa.common.redis.RedisUtil;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ import java.io.IOException;
  * @Version V1.0
  **/
 @RestController
-@Api("图片验证码相关接口")
+@Api(tags = "图片验证码相关接口,不用提交token")
 public class KaptchaController {
     @Autowired
     private DefaultKaptcha defaultKaptcha;
@@ -46,7 +47,12 @@ public class KaptchaController {
     **/
     @GetMapping("/getCode")
     @ApiOperation("获取图片验证码接口")
-    @ApiImplicitParam(name = "deviceId",value = "该设备的唯一性标识即可" ,defaultValue = "1B380160DB6D8E42B2B081F60849FC36")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "token", required = false, dataType = "String",paramType="header"),
+            @ApiImplicitParam(name = "deviceId",value = "该设备的唯一性标识即可" ,defaultValue = "1B380160DB6D8E42B2B081F60849FC36")
+            }
+    )
+
     public void getCode(@RequestParam("deviceId") String deviceId,
                                HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         byte[] captchaChallengeAsJpeg = null;
@@ -59,7 +65,7 @@ public class KaptchaController {
         //第二种
         String text = defaultKaptcha.createText();
         //验证码存放到redis中，过期时间5分钟,单位秒
-        redisUtil.set(deviceId+":"+"code",text,300);
+        redisUtil.set(deviceId+":"+"code",s,300);
        // httpServletRequest.getSession().setAttribute("vrifyCode", text);
         //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
         BufferedImage image = defaultKaptcha.createImage(text);

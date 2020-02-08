@@ -40,7 +40,7 @@ public enum ExceptionEnum {
     UPDATE_SPEC_PARAM_FAILED(400,"特殊规格参数更新失败！" ),
     DELETE_SPEC_PARAM_FAILED(400,"特殊规格参数删除失败！" ),
     INVALID_USER_DATA_TYPE(400,"用户数据类型无效！" ),
-    INVALID_VERIFY_CODE(400,"验证码校验失败！" ),
+    INVALID_VERIFY_CODE(400,"图片验证码校验失败！" ),
     INVALID_USERNAME_PASSWORD(400,"用户名或密码错误！" ),
     CREATE_TOKEN_ERROR(500,"用户凭证生成失败！" ),
     NO_AUTHORIZED(401,"没有登录权限！" ),

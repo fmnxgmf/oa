@@ -15,7 +15,7 @@ import javax.persistence.Table;
  * @Version V1.0
  **/
 @Data
-@Table(name = "oa_position")
+@Table(name = "aoa_position")
 public class Position {
 
     @Id

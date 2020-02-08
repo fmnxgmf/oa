@@ -1,6 +1,8 @@
 package cn.fmnx.oa.entity.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -18,6 +20,8 @@ import java.util.Date;
  * @Version V1.0
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "aoa_user")
 public class User {
 
@@ -161,4 +165,9 @@ public class User {
 
 
     private Integer roleId;			//外键关联 角色表
+
+    public User(Integer userId, @NotBlank(message = "用户名不能为空") String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
 }

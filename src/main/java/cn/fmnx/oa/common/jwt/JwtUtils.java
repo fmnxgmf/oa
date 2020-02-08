@@ -31,9 +31,9 @@ public class JwtUtils {
      */
     public static String generateToken(User userInfo, PrivateKey privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
-//                .claim(JwtConstans.JWT_KEY_ID, userInfo.getUserId())
-//                .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUserName())
-                .claim("user",JsonUtils.serialize(userInfo))
+                .claim(JwtConstans.JWT_KEY_ID, userInfo.getUserId())
+                .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUserName())
+               // .claim("user",JsonUtils.serialize(userInfo))
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
@@ -49,9 +49,9 @@ public class JwtUtils {
      */
     public static String generateToken(User userInfo, byte[] privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
-//                .claim(JwtConstans.JWT_KEY_ID, userInfo.getUserId())
-//                .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUserName())
-                .claim("user",JsonUtils.serialize(userInfo))
+                .claim(JwtConstans.JWT_KEY_ID, userInfo.getUserId())
+                .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUserName())
+                //.claim("user",JsonUtils.serialize(userInfo))
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, RsaUtils.getPrivateKey(privateKey))
                 .compact();
@@ -93,11 +93,12 @@ public class JwtUtils {
     public static User getInfoFromToken(String token, PublicKey publicKey) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
-//        return new User(
-//                ObjectUtils.toInt(body.get(JwtConstans.JWT_KEY_ID)),
-//                ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
-//        );
-        return (User)JsonUtils.parse((String) body.get("user"),User.class);
+        return new User(
+                ObjectUtils.toInt(body.get(JwtConstans.JWT_KEY_ID)),
+                ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
+
+        );
+       // return (User)JsonUtils.parse((String) body.get("user"),User.class);
     }
 
     /**
@@ -111,10 +112,10 @@ public class JwtUtils {
     public static User getInfoFromToken(String token, byte[] publicKey) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
-//        return new User(
-//                ObjectUtils.toLong(body.get(JwtConstans.JWT_KEY_ID)),
-//                ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
-//        );
-        return (User)JsonUtils.parse((String) body.get("user"),User.class);
+        return new User(
+                ObjectUtils.toInt(body.get(JwtConstans.JWT_KEY_ID)),
+                ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
+        );
+        //return (User)JsonUtils.parse((String) body.get("user"),User.class);
     }
 }
