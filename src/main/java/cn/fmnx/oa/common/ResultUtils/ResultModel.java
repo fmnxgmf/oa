@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel
-public class ResultModel implements Serializable {
+public class ResultModel<T> implements Serializable {
     //定义jackson对象
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -32,28 +32,28 @@ public class ResultModel implements Serializable {
      * 返回数据量
      */
     @ApiModelProperty(value = "返回的数据量")
-    private Long count;
+    private Integer count;
 
 
     // 返回内容
     @ApiModelProperty(value = "返回的内容")
-    private Object content;
+    private T content;
 
     public ResultModel(){}
 
     public ResultModel(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
-        this.content = "";
+        this.content = null;
     }
 
-    public ResultModel(Integer code, String msg, Object content) {
+    public ResultModel(Integer code, String msg, T content) {
         this.code = code;
         this.msg = msg;
         this.content = content;
     }
 
-    public ResultModel(ResultStatus status, Object content){
+    public ResultModel(ResultStatus status, T content){
         this.code = status.getCode();
         this.msg = status.getMessage();
         this.content = content;
@@ -65,15 +65,15 @@ public class ResultModel implements Serializable {
     public ResultModel(ResultStatus status) {
         this.code = status.getCode();
         this.msg = status.getMessage();
-        this.content = "";
+        this.content = null;
     }
-    public ResultModel(ResultStatus status, Object content, Long count) {
+    public ResultModel(ResultStatus status, T content, Integer count) {
         this.code = status.getCode();
         this.msg = status.getMessage();
         this.content = content;
         this.count = count;
     }
-    public static ResultModel ok(Object content, Long count) {
+    public static ResultModel ok(Object content, Integer count) {
         return new ResultModel(ResultStatus.SUCCESS, content, count);
     }
     public static ResultModel ok() {

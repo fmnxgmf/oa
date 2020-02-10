@@ -33,6 +33,8 @@ logging:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: cn.fmnx.oa.entity
 mapper:
   identity: MYSQL
 oa:
@@ -42,4 +44,11 @@ oa:
     priKeyPath: \\rsa\\rsa.pri # 私钥地址
     expire: 30 # 过期时间,单位分钟
     cookieName: OA_TOKEN
-
+config:
+  jwt:
+    # 加密密钥
+    secret: abcdefg1234567
+    # token有效时长 半个小时
+    expire: 1800
+    # header 名称
+    header: token

@@ -20,17 +20,17 @@ public class LoginDto implements Serializable {
     /**
      * 登录用户名
      */
-    @ApiModelProperty(value = "登录用户名",name = "userName",example = "gmf")
+    @ApiModelProperty(value = "登录用户名",name = "userName",example = "test")
   private String userName;
     /**
      * 登录密码
      */
-    @ApiModelProperty(value = "登录密码",name = "password",example = "gmf123")
+    @ApiModelProperty(value = "登录密码",name = "password",example = "123456")
   private String password;
     /**
      * 图片验证码
      */
-    @ApiModelProperty(value = "验证码",name = "code",example = "1234")
+    @ApiModelProperty(value = "验证码",name = "code",example = "1a34")
   private String code;
     /**
      * 设备唯一id

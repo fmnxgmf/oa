@@ -1,7 +1,9 @@
 package cn.fmnx.oa.common.exception;
 
 import cn.fmnx.oa.common.enums.ExceptionEnum;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @description:
@@ -11,6 +13,8 @@ import lombok.Data;
  * @modified By:
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExceptionResult {
     private int status;
     private String message;

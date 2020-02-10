@@ -46,7 +46,8 @@ public class JwtConfig {
      */
     public Claims getTokenClaim(String token){
         try {
-            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            Claims body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            return body;
         }catch (Exception e){
             e.printStackTrace();
             return  null;

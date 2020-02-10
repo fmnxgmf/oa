@@ -2,6 +2,7 @@ package cn.fmnx.oa.common.exception;
 
 import cn.fmnx.oa.common.enums.ExceptionEnum;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 public class OaException extends RuntimeException{
     private ExceptionEnum exceptionEnum;
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fmnx.oa.mapper.menuMapper.MenuMapper">
+
+    <select id="finaAllSeeSonMenu" resultType="cn.fmnx.oa.contoller.menu.vo.MenuVO">
+        select
+            menu.menu_id as menuId,
+            menu.is_show as isShow,
+            menu.menu_name as menuName,
+            menu.menu_icon as menuIcon,
+            menu.menu_url as menuUrl,
+            case when menu.parent_id = '0 'then '父级菜单' else '子级菜单'end  as menuType ,
+            menu.sort_id as sortId
+            from aoa_sys_menu as menu ,aoa_role_power_list as role
+            <where>
+                <if test = "roleId !=null">
+                    and role.role_id = #{roleId}
+                </if>
+                <if test = "parentId !=null">
+                    and menu.parent_id = #{parentId}
+                </if>
+                and menu.is_show = 1
+                and menu.menu_id = role.menu_id
+            </where>
+            order by menu.sort_id asc
+    </select>
+</mapper>

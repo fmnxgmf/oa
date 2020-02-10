@@ -1,12 +1,14 @@
 package cn.fmnx.oa.common.jwt.interceptor;
 
+import cn.fmnx.oa.common.jwt.JwtProperties;
+import cn.fmnx.oa.common.jwt.JwtUtils;
 import cn.fmnx.oa.common.jwt.config.JwtConfig;
-import io.jsonwebtoken.Claims;
+import cn.fmnx.oa.entity.user.User;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.SignatureException;
@@ -20,8 +22,10 @@ import java.security.SignatureException;
  */
 @Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
-    @Resource
+    @Autowired
     private JwtConfig jwtConfig;
+    @Autowired
+    private JwtProperties jwtProperties;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -38,17 +42,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         if(StringUtils.isEmpty(token)){
             throw new SignatureException(jwtConfig.getHeader()+ "不能为空");
         }
-        Claims claims = null;
-        try {
-            claims = jwtConfig.getTokenClaim(token);
-            if(claims == null || jwtConfig.isTokenExpired(claims.getExpiration())){
-                throw new SignatureException(jwtConfig.getHeader() + "失效，请重新登录。");
-            }
-        }catch (Exception e){
-            throw new SignatureException(jwtConfig.getHeader() + "失效，请重新登录。");
-        }
-        /** 设置 identityId 用户身份ID */
-        request.setAttribute("identityId", claims.getSubject());
+        //解析token
+        User user = JwtUtils.getInfoFromToken(token, jwtProperties.getPublicKey());
+        request.getSession().setAttribute("uid",user.getUserId());
         return true;
     }
 }
