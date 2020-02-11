@@ -30,11 +30,11 @@ public class SwaggerConfig {
     @Bean
     public Docket creatRestApi(){
         ParameterBuilder aParameterBuilder = new ParameterBuilder();
-        aParameterBuilder.name("Authorization")
+        aParameterBuilder.name("token")
                 .description("token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
-                .required(false)//header中的ticket参数非必填，传空也可以
+                .required(true)// false ->header中的token参数非必填，传空也可以
                 .build();
         List<Parameter> aParameters = Lists.newArrayList();
         aParameters.add(aParameterBuilder.build());
@@ -54,7 +54,7 @@ public class SwaggerConfig {
                         .description("OA自动化项目后端接口文档")
                         .version("9.0")
                                 // 作者信息
-                                .contact(new Contact("fmnx","blog.csdn.net","894697547@qq.com"))
+                                .contact(new Contact("菲梦诺仙","http://120.79.23.95:8088/logins","894697547@qq.com"))
                                 .license("The Apache License")
                                 .licenseUrl("http://www.baidu.com")
                                 .build());

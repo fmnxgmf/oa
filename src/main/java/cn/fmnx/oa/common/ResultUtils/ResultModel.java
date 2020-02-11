@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @Data
-@ApiModel
+@ApiModel(description = "后端返回数据结构的模板对象")
 public class ResultModel<T> implements Serializable {
     //定义jackson对象
     private static final ObjectMapper mapper = new ObjectMapper();

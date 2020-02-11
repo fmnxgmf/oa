@@ -1,6 +1,7 @@
 package cn.fmnx.oa.mapper.menuMapper;
 
 import cn.fmnx.oa.contoller.menu.vo.MenuVO;
+import cn.fmnx.oa.contoller.menu.vo.ParentMenuVO;
 import cn.fmnx.oa.entity.menu.Menu;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -37,4 +38,26 @@ public interface MenuMapper extends Mapper<Menu> {
     * @Date: 2020/2/10
    **/
     List<MenuVO> finaAllSeeSonMenu(@Param("roleId") Integer roleId,@Param("parentId") Integer parentId);
+    @Select("select " +
+            "menu.menu_id as menuId,"+
+            "menu.is_show as isShow," +
+            "menu.menu_name as menuName, " +
+            "menu.menu_icon as menuIcon, " +
+            "menu.menu_url as menuUrl," +
+            "case when menu.parent_id = '0 'then '父级菜单' else '子级菜单'end  as menuType ,"+
+            "menu.sort_id as sortId  "+
+            " from aoa_sys_menu as menu order by if(isnull(menu.sort_id),1,0),menu.sort_id asc")
+    List<MenuVO> findAllMenus();
+    /**
+     * @MethodName: findParenMenus
+     * @Description: 查找所有的父级菜单
+     * @Param: []
+     * @Return: java.util.List<cn.fmnx.oa.contoller.menu.vo.ParentMenuVO>
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @Select("select menu.menu_id as parentId ,menu.menu_name as name from aoa_sys_menu as menu where menu.parent_id = 0")
+    List<ParentMenuVO> findParenMenus();
+
+    MenuVO findOneMenuByid(@Param("menuId") Long menuId);
 }

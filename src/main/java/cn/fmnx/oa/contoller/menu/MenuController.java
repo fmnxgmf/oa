@@ -3,7 +3,10 @@ package cn.fmnx.oa.contoller.menu;
 import cn.fmnx.oa.common.ResultUtils.ResultModel;
 import cn.fmnx.oa.common.enums.ExceptionEnum;
 import cn.fmnx.oa.common.exception.OaException;
+import cn.fmnx.oa.contoller.menu.dto.AddMenuDTO;
 import cn.fmnx.oa.contoller.menu.vo.MenuVO;
+import cn.fmnx.oa.contoller.menu.vo.ParentMenuVO;
+import cn.fmnx.oa.entity.menu.Menu;
 import cn.fmnx.oa.entity.user.User;
 import cn.fmnx.oa.service.UserService.UserService;
 import cn.fmnx.oa.service.UserService.impl.UserServiceImpl;
@@ -11,6 +14,7 @@ import cn.fmnx.oa.service.menuService.impl.MenuServiceImpl;
 import io.swagger.annotations.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +32,7 @@ import java.util.Map;
  * @Version V1.0
  **/
 @RestController
-@Api(tags = "系统菜单相关接口")
+@Api(tags = "系统管理相关接口首页数据展示,菜单管理模块")
 public class MenuController {
     @Autowired
     private MenuServiceImpl menuService;
@@ -86,5 +90,87 @@ public class MenuController {
         menuVOS =  menuService.findAllSeeSonMenu(user.getRoleId(),parentId);
         map.put("menuVOS",menuVOS);
         return ResultModel.ok(map,menuVOS.size());
+    }
+    /**
+     * @MethodName: findAllMenus
+     * @Description: 查找所有菜单数据接口
+     * @Param: []
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.menu.vo.MenuVO>
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @ApiOperation(value = "查找所有菜单数据接口")
+    @GetMapping("/findAllMenus")
+    public ResultModel<MenuVO> findAllMenus(){
+        List<MenuVO> list = menuService.findAllMenus();
+        Map map = new HashMap(2);
+        if (! CollectionUtils.isEmpty(list)){
+            map.put("MenuVOS",list);
+            return ResultModel.ok(map,list.size());
+        }else {
+            throw new OaException(ExceptionEnum.FAILD_FIND_MENUS);
+        }
+    }
+    /**
+     * @MethodName: addMenu
+     * @Description: 添加菜单的接口
+     * @Param: [addMenuDTO]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @ApiOperation(value = "添加菜单的接口")
+    @PostMapping("/addMenu")
+    public ResultModel addMenu(@RequestBody AddMenuDTO addMenuDTO){
+        Menu menu = new Menu();
+        //主键不用管，自增主键，添加后会自己回显
+        menu.setMenuIcon(addMenuDTO.getMenuIcon());
+        menu.setMenuName(addMenuDTO.getMenuName());
+        menu.setParentId(addMenuDTO.getParentId());
+        menu.setISshow(addMenuDTO.getIsShow());;
+        menu.setSortId(addMenuDTO.getSortId());
+        menu.setMenuUrl(addMenuDTO.getMenuUrl());
+       boolean flag = menuService.addMenu(menu);
+       if (flag){
+           return ResultModel.ok("新增菜单数据成功");
+       }else {
+           throw new OaException(ExceptionEnum.FAIL_ADD_MENU);
+       }
+
+    }
+    /**
+     * @MethodName: findParentMenu
+     * @Description: 新增菜单所需要的父级菜单的id，name值
+     * @Param: []
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.menu.vo.ParentMenuVO>
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @GetMapping("/findParentMenus")
+    @ApiOperation(value = "新增菜单所需要的父级菜单的id，name值")
+    public ResultModel<ParentMenuVO> findParentMenu(){
+        List<ParentMenuVO> list =menuService.findParent();
+        Map map = new HashMap(2);
+        if (!CollectionUtils.isEmpty(list)){
+            map.put("parentMenuVOS",list);
+            return ResultModel.ok(map,list.size());
+        }else {
+            throw new OaException(ExceptionEnum.NOT_FOUND_PARENT_MENUS);
+        }
+    }
+    @ApiOperation(value = "根据menuId查找某个菜单的所有展示内容可以用来回显数据")
+    @ApiImplicitParam(name = "menuId",value = "某个菜单项的id值",required = true,dataType = "Long")
+    @GetMapping("findOneMenuById")
+    public ResultModel<MenuVO> findOneMenuById(@RequestParam("menuId") Long menuId){
+        MenuVO menuVO = menuService.findOneMenuById(menuId);
+        Map map = new HashMap(2);
+        if(! StringUtils.isEmpty(menuVO)){
+            map.put("menuVO",menuVO);
+            return ResultModel.ok(map,1);
+        }else{
+            throw new OaException(ExceptionEnum.FIND_ONEMENU_BYID_ERROR);
+        }
+
+
     }
 }

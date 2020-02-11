@@ -25,7 +25,7 @@ import java.io.Serializable;
  *   `sort_id` int(11) DEFAULT NULL,
  */
 @Data
-@ApiModel
+@ApiModel(description = "返回菜单栏首页数据给前端的对象")
 public class MenuVO implements Serializable {
 
     private static final long serialVersionUID = -5009141333570070036L;
@@ -33,7 +33,7 @@ public class MenuVO implements Serializable {
      * 菜单id
      */
     @ApiModelProperty(value = "菜单id")
-    private Integer menuId;
+    private Long menuId;
     /**
      * 菜单名称
      */
@@ -64,4 +64,6 @@ public class MenuVO implements Serializable {
      */
     @ApiModelProperty(value = "菜单是否显示 1为显示")
     private Integer isShow;
+
+    private ParentMenuVO parentMenuVO;
 }

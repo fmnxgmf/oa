@@ -24,4 +24,37 @@
             </where>
             order by menu.sort_id asc
     </select>
+    <resultMap id="menuVOSs" type="cn.fmnx.oa.contoller.menu.vo.MenuVO">
+        <id property="menuId" column="menu_id"></id>
+        <result property="isShow" column="is_show"></result>
+        <result property="menuIcon" column="menu_icon"></result>
+        <result property="menuUrl" column="menu_url"></result>
+        <result property="menuName" column="menu_name"></result>
+        <result property="sortId" column="sort_id"></result>
+        <association property="parentMenuVO" javaType="cn.fmnx.oa.contoller.menu.vo.ParentMenuVO">
+            <id property="parentId" column="parent_id"></id>
+            <result property="parentName" column="menu_name"></result>
+        </association>
+    </resultMap>
+    <select id="findOneMenuByid" resultMap="menuVOSs" resultType="cn.fmnx.oa.contoller.menu.vo.MenuVO">
+     SELECT
+            menu.menu_id ,
+	        menu.is_show ,
+	        menu.menu_name ,
+	        menu.menu_icon ,
+            menu.parent_id ,
+	        menu.menu_url ,
+	        menu2.menu_name AS parentName,
+	        menu2.menu_id AS parentId,
+	        menu.sort_id
+        FROM
+	        aoa_sys_menu AS menu
+	        left join  aoa_sys_menu AS menu2 on  menu.parent_id = menu2.menu_id
+	    <where>
+            <if test="menuId !=null">
+                and menu.menu_id = #{menuId}
+            </if>
+        </where>
+
+    </select>
 </mapper>

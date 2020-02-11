@@ -54,10 +54,10 @@ public class Menu {
     @Column(name = "sort_id")
     private Integer sortId=999;
     /**
-     * // 菜单是否显示
+     * // 菜单是否显示 1显示
      */
     @Column(name = "is_show")
-    private Boolean show=false;
+    private Integer iSshow;
     /**
      * // 权限值分数
      */
