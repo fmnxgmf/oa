@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.deptMapper.DeptMapper">
+
+    <select id="findAllDept" resultType="cn.fmnx.oa.contoller.dept.vo.DeptVO">
+        select
+            dept.dept_id,
+            dept.dept_addr,
+            dept.email,
+            dept.dept_name,
+            dept.dept_tel
+        from aoa_dept as dept
+    </select>
+</mapper>
