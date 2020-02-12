@@ -22,4 +22,6 @@ public interface TypeSysService {
     TypeListVO findOneTypeById(Integer typeId);
 
     boolean deleteTypeListByID(Long typeId);
+
+    List<TypeListVO> findTypeListLikeByNameOrModel(String typeNameOrMode);
 }

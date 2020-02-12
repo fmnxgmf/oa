@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fmnx.oa.mapper.statuSysMapper.StatuSysMapper">
+
+    <select id="findAllStatusList" resultType="cn.fmnx.oa.contoller.menu.vo.StatusListVO">
+        select
+            s.status_id ,
+            s.status_color,
+            s.status_model,
+            s.status_name,
+            s.sort_value,
+            s.sort_precent
+        from aoa_status_list as s order by s.sort_value asc
+    </select>
+</mapper>

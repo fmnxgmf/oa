@@ -7,6 +7,9 @@ import cn.fmnx.oa.entity.user.User;
 
 import java.util.List;
 
+/**
+ * @author gmf
+ */
 public interface MenuService {
     List<MenuVO> findAllSeeParentMenu(User user);
 
@@ -19,4 +22,12 @@ public interface MenuService {
     List<ParentMenuVO> findParent();
 
     MenuVO findOneMenuById(Long menuId);
+
+    boolean updateMenu(Menu menu);
+
+    boolean deleteMenu(Long menuId);
+
+    boolean changeSortId(Long parentId, Integer sortId, Long menuId, Integer step);
+
+    List<MenuVO> findMenuByLikeName(String menuName);
 }

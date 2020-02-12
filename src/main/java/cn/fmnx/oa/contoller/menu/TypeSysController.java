@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.bytebuddy.description.type.TypeList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class TypeSysController {
         if(flag){
             return ResultModel.ok("数据添加成功");
         }else {
-            throw new OaException(ExceptionEnum.CREATE_TYPE_LIST_ERROR);
+            throw new OaException(ExceptionEnum.CREATE_DATA_LIST_ERROR);
         }
     }
     /**
@@ -106,10 +107,18 @@ public class TypeSysController {
         if (flag){
             return ResultModel.ok("数据修改成功");
         }else {
-            throw new OaException(ExceptionEnum.UPDATE_TYPE_LIST_ERROR);
+            throw new OaException(ExceptionEnum.UPDATE_DATA_LIST_ERROR);
         }
 
     }
+    /**
+     * @MethodName: deleteTypeListById
+     * @Description: 删除管理类型数据的接口
+     * @Param: [typeId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/12
+    **/
     @ApiOperation(value = "删除管理类型数据的接口")
     @ApiImplicitParam(value = "删除该类型的id值",name = "typeId",required = true)
     @DeleteMapping("/deleteType")
@@ -118,9 +127,19 @@ public class TypeSysController {
         if (flag){
             return ResultModel.ok("删除成功");
         }else {
-            throw new OaException(ExceptionEnum.DELETE_TYPE_LIST_ERROR);
+            throw new OaException(ExceptionEnum.DELETE_DATA_LIST_ERROR);
         }
-
     }
-
+    @ApiOperation(value = "根据类型管理的名称或者模块来模糊查询")
+    @ApiImplicitParam(name = "typeNameOrMode",value = "查询类型管理按模块或者名称查询，参数为空查所有",required = false)
+    @GetMapping("/findTypeByNameOrModel")
+    public ResultModel<TypeListVO> findTypeListLikeByNameOrModel(@RequestParam("typeNameOrMode") String typeNameOrMode){
+        List<TypeListVO> list = typeSysService.findTypeListLikeByNameOrModel(typeNameOrMode);
+        Map map = new HashMap(2);
+        if(!CollectionUtils.isEmpty(list)){
+            map.put("typeListVOS",list);
+            return ResultModel.ok(map,list.size());
+        }
+        return  ResultModel.ok(ExceptionEnum.FIND_DATA_ISEMPTY.getMsg());
+    }
 }

@@ -158,8 +158,16 @@ public class MenuController {
             throw new OaException(ExceptionEnum.NOT_FOUND_PARENT_MENUS);
         }
     }
+    /**
+     * @MethodName: findOneMenuById
+     * @Description: 根据menuId查找某个菜单的所有展示内容可以用来回显数据
+     * @Param: [menuId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.menu.vo.MenuVO>
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
     @ApiOperation(value = "根据menuId查找某个菜单的所有展示内容可以用来回显数据")
-    @ApiImplicitParam(name = "menuId",value = "某个菜单项的id值",required = true,dataType = "Long")
+    @ApiImplicitParam(name = "menuId",value = "某个菜单项的id值",required = true)
     @GetMapping("findOneMenuById")
     public ResultModel<MenuVO> findOneMenuById(@RequestParam("menuId") Long menuId){
         MenuVO menuVO = menuService.findOneMenuById(menuId);
@@ -170,7 +178,93 @@ public class MenuController {
         }else{
             throw new OaException(ExceptionEnum.FIND_ONEMENU_BYID_ERROR);
         }
-
-
+    }
+    /**
+     * @MethodName: editMenu
+     * @Description: 修改菜单提交修改后数据的接口
+     * @Param: [addMenuDTO]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @ApiOperation(value = "修改菜单提交修改后数据的接口")
+    @PutMapping("/updateMenu")
+    public ResultModel editMenu(@RequestBody AddMenuDTO addMenuDTO){
+        Menu menu = new Menu();
+        menu.setMenuId(addMenuDTO.getMenuId());
+        menu.setISshow(addMenuDTO.getIsShow());
+        menu.setMenuUrl(addMenuDTO.getMenuUrl());
+        menu.setSortId(addMenuDTO.getSortId());
+        menu.setMenuName(addMenuDTO.getMenuName());
+        menu.setMenuIcon(addMenuDTO.getMenuIcon());
+        menu.setParentId(addMenuDTO.getParentId());
+        boolean flag = menuService.updateMenu(menu);
+        if(flag){
+            return  ResultModel.ok("数据修改成功!");
+        }else {
+            throw new OaException(ExceptionEnum.UPDATE_DATA_LIST_ERROR);
+        }
+    }
+    /**
+     * @MethodName: deleteMenu
+     * @Description: 根据menuID删除某个菜单的接口
+     * @Param: [menuId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @ApiOperation(value = "根据menuID删除某个菜单的接口")
+    @ApiImplicitParam(name = "menuId",value = "菜单的id",required = true)
+    @DeleteMapping("/deleteMenu")
+    public ResultModel deleteMenu(@RequestParam("menuId")Long menuId){
+        boolean flag =menuService.deleteMenu(menuId);
+        if (flag){
+            return ResultModel.ok("删除数据成功");
+        }else {
+            throw new OaException(ExceptionEnum.DELETE_DATA_LIST_ERROR);
+        }
+    }/**
+     * @MethodName: deleteMenu
+     * @Description: 菜单位置上下移动的接口
+     * @Param: [menuId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/11
+    **/
+    @ApiOperation(value = "菜单位置上下移动的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "parentId",value = "该移位菜单的父级菜单id" ,required = true),
+            @ApiImplicitParam(name = "sortId",value = "该移位菜单的排序值" ,required = true),
+            @ApiImplicitParam(name = "menuId",value = "该移位菜单的自己id值" ,required = true),
+            @ApiImplicitParam(name = "step",value = "该移位菜单的移动,向上移为正，向下移为负",required = true)
+    })
+    @PutMapping("/changeSortId")
+    public ResultModel changeSortId(@RequestParam("parentId") Long parentId,@RequestParam("sortId")Integer sortId,@RequestParam("menuId")Long menuId,@RequestParam("step")Integer step){
+       boolean flag = menuService.changeSortId(parentId,sortId,menuId,step);
+       if (flag){
+           return ResultModel.ok("菜单移动成功");
+       }else {
+           throw new OaException(ExceptionEnum.MOVE_MENU_FAIL);
+       }
+    }
+    /**
+     * @MethodName: findMenuByLikeName
+     * @Description: 根据菜单名称查询菜单模糊查询
+     * @Param: [menuName]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.entity.menu.Menu>
+     * @Author: gmf
+     * @Date: 2020/2/12
+    **/
+    @ApiOperation(value = "根据菜单名称查询菜单模糊查询")
+    @ApiImplicitParam(name = "menuName",value = "菜单的名称,名称为空则查询所有")
+    @GetMapping("/findMenuByLikeName")
+    public ResultModel<Menu> findMenuByLikeName(@RequestParam("menuName")String menuName){
+        List<MenuVO> menus = menuService.findMenuByLikeName(menuName);
+        Map map = new HashMap(2);
+        if (!CollectionUtils.isEmpty(menus)){
+            map.put("menus",menus);
+            return ResultModel.ok(map,menus.size());
+        }
+        return ResultModel.ok(ExceptionEnum.FIND_DATA_ISEMPTY.getMsg());
     }
 }

@@ -2,6 +2,7 @@ package cn.fmnx.oa.mapper.typeSysMapper;
 
 import cn.fmnx.oa.contoller.menu.vo.TypeListVO;
 import cn.fmnx.oa.entity.menu.SystemTypeList;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -35,5 +36,13 @@ public interface TypeSysMapper extends Mapper<SystemTypeList> {
             "from aoa_type_list as type order by if(isnull(type.sort_value),1,0),type.sort_value asc ")
     List<TypeListVO> findAllTypeList();
 
-
+    @Select("select " +
+            "type.type_id ," +
+            "type.type_model,t" +
+            "ype.type_name," +
+            "type.sort_value as typeSortValue " +
+            "from aoa_type_list as type " +
+            "where concat(ifnull(type.type_model,''),ifnull(type.type_name,'')) like concat('%',#{typeNameOrMode},'%')" +
+            "")
+    List<TypeListVO> findTypeListLikeByNameOrModel(@Param("typeNameOrMode") String typeNameOrMode);
 }

@@ -6,6 +6,7 @@ import cn.fmnx.oa.mapper.typeSysMapper.TypeSysMapper;
 import cn.fmnx.oa.service.typeSysService.TypeSysService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  * @Version V1.0
  **/
 @Service
+@Transactional
 public class TypeSysServiceImpl implements TypeSysService {
     @Resource
     private TypeSysMapper typeSysMapper;
@@ -65,5 +67,11 @@ public class TypeSysServiceImpl implements TypeSysService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<TypeListVO> findTypeListLikeByNameOrModel(String typeNameOrMode) {
+
+        return typeSysMapper.findTypeListLikeByNameOrModel(typeNameOrMode);
     }
 }

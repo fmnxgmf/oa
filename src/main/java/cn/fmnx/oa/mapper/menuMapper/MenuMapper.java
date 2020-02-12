@@ -60,4 +60,10 @@ public interface MenuMapper extends Mapper<Menu> {
     List<ParentMenuVO> findParenMenus();
 
     MenuVO findOneMenuByid(@Param("menuId") Long menuId);
+
+    int changeOneSelfSortId(@Param("parentId") Long parentId, @Param("sortId") Integer sortId, @Param("menuId") Long menuId, @Param("step") Integer step);
+
+    int chageOtherSortId(@Param("parentId")Long parentId, @Param("sortId")Integer sortId, @Param("menuId")Long menuId, @Param("step")Integer step);
+
+    List<MenuVO> findMenuByLikeName(@Param("menuName") String menuName);
 }

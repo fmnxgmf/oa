@@ -4,6 +4,7 @@ import cn.fmnx.oa.entity.user.User;
 import cn.fmnx.oa.mapper.userMapper.UserMapper;
 import cn.fmnx.oa.service.UserService.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
  * @Version V1.0
  **/
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;

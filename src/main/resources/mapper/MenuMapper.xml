@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.fmnx.oa.mapper.menuMapper.MenuMapper">
+    <update id="changeOneSelfSortId">
+        update aoa_sys_menu as menu set menu.sort_id = menu.sort_id - #{step} where menu.menu_id = #{menuId}
+    </update>
+    <update id="chageOtherSortId">
+        update aoa_sys_menu as menu set menu.sort_id = #{sortId} where menu.parent_id = #{parentId} and menu.sort_id = #{sortId} - #{step}
+    </update>
 
     <select id="finaAllSeeSonMenu" resultType="cn.fmnx.oa.contoller.menu.vo.MenuVO">
         select
@@ -56,5 +62,21 @@
             </if>
         </where>
 
+    </select>
+    <select id="findMenuByLikeName" resultType="cn.fmnx.oa.contoller.menu.vo.MenuVO">
+        select
+          menu.menu_id as menuId,
+          menu.is_show as isShow,
+          menu.menu_name as menuName,
+          menu.menu_icon as menuIcon,
+          menu.menu_url as menuUrl,
+          case when menu.parent_id = '0 'then '父级菜单' else '子级菜单'end  as menuType ,
+          menu.sort_id as sortId
+        from aoa_sys_menu AS menu
+        <where>
+            <if test="menuName !=null and menuName !=''">
+                and menu.menu_name like '%${menuName}%'
+            </if>
+        </where>
     </select>
 </mapper>

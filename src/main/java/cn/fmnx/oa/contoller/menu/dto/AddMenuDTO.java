@@ -18,7 +18,7 @@ public class AddMenuDTO {
      * 菜单id
      */
     @ApiModelProperty(value = "菜单id")
-    private Integer menuId;
+    private Long menuId;
     /**
      * 菜单名称
      */
