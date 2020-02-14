@@ -23,4 +23,5 @@ public interface StatuSysService {
 
     List<StatusListVO> findAllStatusList();
 
+    List<StatusListVO> findStatusByNameOrModel(String nameOrModel);
 }

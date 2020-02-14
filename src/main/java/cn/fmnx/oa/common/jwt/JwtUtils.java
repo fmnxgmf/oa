@@ -33,7 +33,6 @@ public class JwtUtils {
         return Jwts.builder()
                 .claim(JwtConstans.JWT_KEY_ID, userInfo.getUserId())
                 .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUserName())
-               // .claim("user",JsonUtils.serialize(userInfo))
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
@@ -51,7 +50,6 @@ public class JwtUtils {
         return Jwts.builder()
                 .claim(JwtConstans.JWT_KEY_ID, userInfo.getUserId())
                 .claim(JwtConstans.JWT_KEY_USER_NAME, userInfo.getUserName())
-                //.claim("user",JsonUtils.serialize(userInfo))
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, RsaUtils.getPrivateKey(privateKey))
                 .compact();
@@ -98,7 +96,7 @@ public class JwtUtils {
                 ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
 
         );
-       // return (User)JsonUtils.parse((String) body.get("user"),User.class);
+
     }
 
     /**
@@ -116,6 +114,6 @@ public class JwtUtils {
                 ObjectUtils.toInt(body.get(JwtConstans.JWT_KEY_ID)),
                 ObjectUtils.toString(body.get(JwtConstans.JWT_KEY_USER_NAME))
         );
-        //return (User)JsonUtils.parse((String) body.get("user"),User.class);
+
     }
 }

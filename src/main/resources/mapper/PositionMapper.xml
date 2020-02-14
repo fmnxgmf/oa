@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.positionMapper.PositionMapper">
+    <resultMap id="deptMap" type="cn.fmnx.oa.contoller.position.vo.PositionVO">
+        <id property="positionId" column="position_id"></id>
+        <result property="name" column="name"></result>
+        <result property="describtion" column="describtion"></result>
+        <result property="level" column="level"></result>
+        <association property="deptIdAndNameVO" javaType="cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO">
+            <id property="deptId" column="dept_id"></id>
+            <result property="deptName" column="dept_name"></result>
+        </association>
+    </resultMap>
+    <select id="findOnePositionByID" resultMap="deptMap" resultType="cn.fmnx.oa.contoller.position.vo.PositionVO">
+        select
+        p.position_id,
+        p.level,
+        p.name,
+        p.describtion,
+        d.dept_id,
+        d.dept_name
+        from aoa_position as p
+        join aoa_dept as d on p.deptid = d.dept_id
+        <where>
+            <if test="positionId != null">
+                and p.position_id = #{positionId}
+            </if>
+        </where>
+    </select>
+</mapper>

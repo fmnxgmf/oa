@@ -1,5 +1,115 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.fmnx.oa.mapper.userMapper.UserMapper">
+    <resultMap id="userVOS" type="cn.fmnx.oa.contoller.user.vo.UserVO">
+        <id property="userId" column="user_id"></id>
+        <result property="address" column="address"></result>
+        <result property="eamil" column="eamil"></result>
+        <result property="salary" column="salary"></result>
+        <result property="imgPath" column="img_path"></result>
+        <result property="realName" column="real_name"></result>
+        <result property="userTel" column="user_tel"></result>
+        <result property="userName" column="user_name"></result>
+        <association property="positionIdNameVO" javaType="cn.fmnx.oa.contoller.position.vo.PositionIdNameVO">
+            <id property="positionId" column="position_id"></id>
+            <result property="name" column="name"></result>
+        </association>
+        <association property="deptIdAndNameVO" javaType="cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO">
+            <id property="deptId" column="dept_id"></id>
+            <result property="deptName" column="dept_name"></result>
+        </association>
+        <association property="roleIdAndNameVO" javaType="cn.fmnx.oa.contoller.role.vo.RoleIdAndNameVO">
+            <id property="roleId" column="role_id"></id>
+            <result property="roleName" column="role_name"></result>
+        </association>
+    </resultMap>
+    <select id="findAllUserInfo"  resultMap="userVOS" resultType="cn.fmnx.oa.contoller.user.vo.UserVO">
+            select
+           u.user_id,
+           u.address,
+           u.birth,
+           u.eamil,
+           u.img_path,
+           u.real_name,
+           u.salary,
+           u.sex,
+           u.user_edu,
+           u.user_name,
+           u.user_tel,
+           r.role_id ,
+           r.role_name ,
+           d.dept_id ,
+           d.dept_name ,
+           p.position_id ,
+           p.name
+            from aoa_user as u
+            join aoa_role_ as r on u.role_id = r.role_id
+            join aoa_position as p on u.position_id = p.position_id
+            join aoa_dept as d on u.dept_id = d.dept_id
+    </select>
+    <select id="findUserById" resultMap="userVOS" resultType="cn.fmnx.oa.contoller.user.vo.UserVO">
+        select
+           u.user_id,
+           u.address,
+           u.birth,
+           u.eamil,
+           u.img_path,
+           u.real_name,
+           u.salary,
+           u.sex,
+           u.user_edu,
+           u.user_name,
+           u.user_tel,
+           r.role_id ,
+           r.role_name ,
+           d.dept_id ,
+           d.dept_name ,
+           p.position_id ,
+           p.name
+            from aoa_user as u
+            join aoa_role_ as r on u.role_id = r.role_id
+            join aoa_position as p on u.position_id = p.position_id
+            join aoa_dept as d on u.dept_id = d.dept_id
+            <where>
+                <if test="userId !=null">
+                    and u.user_id = #{userId}
+                </if>
+            </where>
 
+    </select>
+    <select id="findLikeUser"  resultMap="userVOS" resultType="cn.fmnx.oa.contoller.user.vo.UserVO">
+         select
+            u.user_id,
+            u.address,
+            u.birth,
+            u.eamil,
+            u.img_path,
+            u.real_name,
+            u.salary,
+            u.sex,
+            u.user_edu,
+            u.user_name,
+            u.user_tel,
+            r.role_id ,
+            r.role_name ,
+            d.dept_id ,
+            d.dept_name ,
+            p.position_id ,
+            p.name
+        from aoa_user as u
+        join aoa_role_ as r on u.role_id = r.role_id
+        join aoa_position as p on u.position_id = p.position_id
+        join aoa_dept as d on u.dept_id = d.dept_id
+        <where>
+            <if test="condition !=null and condition !=''">
+                and concat(
+                ifnull(d.dept_name,''),
+                ifnull(u.user_name,''),
+                ifnull(p.name ,''),
+                ifnull(r.role_name,''),
+                ifnull(u.real_name,''),
+                ifnull(u.user_tel,'')) like '%${condition}%'
+            </if>
+        </where>
+    </select>
 </mapper>

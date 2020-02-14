@@ -78,4 +78,10 @@ public class StatuSysServiceImpl implements StatuSysService {
         return statuSysMapper.findAllStatusList();
 
     }
+
+    @Override
+    public List<StatusListVO> findStatusByNameOrModel(String nameOrModel) {
+
+        return statuSysMapper.findStatusByNameOrModel(nameOrModel);
+    }
 }

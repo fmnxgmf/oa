@@ -124,4 +124,25 @@ public class StatusSysController {
             throw new OaException(ExceptionEnum.FAILD_FIND_STATUS);
         }
     }
+    /**
+     * @MethodName: findStatusByNameOrModel
+     * @Description: 根据状态名称或者模块来模糊查询
+     * @Param: [nameOrModel]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.menu.vo.StatusListVO>
+     * @Author: gmf
+     * @Date: 2020/2/13
+    **/
+    @ApiOperation(value = "根据状态名称或者模块来模糊查询")
+    @ApiImplicitParam(name = "nameOrModel",value = "接收模糊查询的条件可以是名称或者模块,为空则查询所有",required = false)
+    @GetMapping("/findStatusByNameOrModel")
+    public ResultModel<StatusListVO> findStatusByNameOrModel(@RequestParam("nameOrModel")String nameOrModel){
+        List<StatusListVO> statusListVOS = statuSysService.findStatusByNameOrModel(nameOrModel);
+        Map map = new HashMap(2);
+        if (!CollectionUtils.isEmpty(statusListVOS)){
+            map.put("statusListVOS",statusListVOS);
+            return ResultModel.ok(map,statusListVOS.size());
+        }else {
+            return  ResultModel.ok(ExceptionEnum.FIND_DATA_ISEMPTY.getMsg());
+        }
+    }
 }

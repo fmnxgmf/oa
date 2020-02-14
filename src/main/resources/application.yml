@@ -5,6 +5,9 @@ spring:
     host: 120.79.23.95
     port: 6379
     password: gmf123
+  servlet:
+    multipart:
+      max-file-size: 5MB # 限制文件上传的大小
   datasource:
     url: jdbc:mysql://localhost:3306/oasys
     username: root
@@ -22,6 +25,8 @@ fdfs:
     height: 60
   tracker-list: # tracker地址
     - 120.79.23.95:22122
+
+
 #showSql
 logging:
   level:
@@ -44,6 +49,12 @@ oa:
     priKeyPath: \\rsa\\rsa.pri # 私钥地址
     expire: 30 # 过期时间,单位分钟
     cookieName: OA_TOKEN
+  upload:
+    baseUrl: http://120.79.23.95/
+    allowTypes:
+      - image/jpeg
+      - image/png
+      - image/bmp
 config:
   jwt:
     # 加密密钥

@@ -10,6 +10,23 @@
             s.status_name,
             s.sort_value,
             s.sort_precent
-        from aoa_status_list as s order by s.sort_value asc
+        from aoa_status_list as s order by if(isnull(s.sort_value),1,0),s.sort_value asc
+    </select>
+
+    <select id="findStatusByNameOrModel" resultType="cn.fmnx.oa.contoller.menu.vo.StatusListVO">
+        select
+            s.status_id ,
+            s.status_color,
+            s.status_model,
+            s.status_name,
+            s.sort_value,
+            s.sort_precent
+        from aoa_status_list as s
+        <where>
+            <if test="nameOrModel != null and nameOrModel != ''">
+                and concat(ifnull(s.status_model,""),ifnull(s.status_name,'')) like '%${nameOrModel}%'
+            </if>
+        </where>
+        order by  if(isnull(s.sort_value),1,0),s.sort_value asc
     </select>
 </mapper>

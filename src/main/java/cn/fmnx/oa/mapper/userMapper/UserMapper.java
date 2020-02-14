@@ -1,5 +1,6 @@
 package cn.fmnx.oa.mapper.userMapper;
 
+import cn.fmnx.oa.contoller.user.vo.UserVO;
 import cn.fmnx.oa.entity.user.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,5 +21,8 @@ public interface UserMapper extends Mapper<User> {
     @Select("select user.user_name,user.user_id from aoa_user user where user.user_name = #{userName} and user.password = #{password}")
      User findUserByNameAndPassword(@Param("userName")String userName,@Param("password")String password);
 
+     List<UserVO> findAllUserInfo();
+     UserVO findUserById(@Param("userId")Long userId);
 
+    List<UserVO> findLikeUser(@Param("condition") String condition);
 }

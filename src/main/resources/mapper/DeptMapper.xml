@@ -11,4 +11,10 @@
             dept.dept_tel
         from aoa_dept as dept
     </select>
+    <select id="findAllDeptIdAndName" resultType="cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO">
+        select
+        dept.dept_id,
+        dept.dept_name
+        from aoa_dept as dept
+    </select>
 </mapper>

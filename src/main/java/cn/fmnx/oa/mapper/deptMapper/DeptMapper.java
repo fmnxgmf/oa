@@ -1,5 +1,6 @@
 package cn.fmnx.oa.mapper.deptMapper;
 
+import cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO;
 import cn.fmnx.oa.contoller.dept.vo.DeptVO;
 import cn.fmnx.oa.entity.dept.Dept;
 import tk.mybatis.mapper.common.Mapper;
@@ -18,4 +19,5 @@ public interface DeptMapper extends Mapper<Dept> {
 
     List<DeptVO> findAllDept();
 
+    List<DeptIdAndNameVO> findAllDeptIdAndName();
 }

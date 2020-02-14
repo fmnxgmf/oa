@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -31,11 +32,13 @@ public class AddDeptDTO implements Serializable {
      * 电话
      */
     @ApiModelProperty(name = "deptTel",value = "电话")
+    @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$")
     private String deptTel;
     /**
      * 邮箱
      */
     @ApiModelProperty(name = "email",value = "邮箱")
+    @Pattern(regexp = "^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$", message = "请填写正确邮箱号")
     private String email;
     /**
      * 地址
@@ -46,5 +49,6 @@ public class AddDeptDTO implements Serializable {
      * 部门传真
      */
     @ApiModelProperty(name = "deptFax",value = "传真")
+    @Pattern(regexp = "^(\\d{3,4}-)?\\d{7,8}$")
     private String deptFax;
 }

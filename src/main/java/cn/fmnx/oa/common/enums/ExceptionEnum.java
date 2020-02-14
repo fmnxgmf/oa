@@ -14,6 +14,9 @@ import lombok.*;
 @Getter
 public enum ExceptionEnum {
     FIND_DATA_ISEMPTY(200,"[查询数据为空]"),
+    CONTENT_TYPE_ERROE(400,"上传文件类型无效！" ),
+    INVALID_IMAGE_ERROE(400,"文件内容无效！" ),
+    UPLOAD_FAILED_ERROE(400, "文件上传失败！"),
     ECHO_DATA_FAIL(500,"[回显数据失败!]"),
     NOT_FOUND_USER(400,"[用户不存在!]"),
     MOVE_MENU_FAIL(500,"[菜单移动失败]"),
