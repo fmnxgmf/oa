@@ -1,14 +1,16 @@
 package cn.fmnx.oa.service.deptService.impl;
 
-import cn.fmnx.oa.common.utils.CopyListutils;
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.dept.dto.AddDeptDTO;
 import cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO;
 import cn.fmnx.oa.contoller.dept.vo.DeptVO;
 import cn.fmnx.oa.entity.dept.Dept;
 import cn.fmnx.oa.mapper.deptMapper.DeptMapper;
 import cn.fmnx.oa.service.deptService.DeptService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,10 +31,11 @@ public class DeptServiceImpl implements DeptService {
     @Resource
     private DeptMapper deptMapper;
     @Override
-    public List<DeptVO> findAllDept() {
-       List<DeptVO>  deptVOS = deptMapper.findAllDept();
-
-        return deptVOS;
+    public PageResult<DeptVO> findAllDept(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
+        List<DeptVO>  deptVOS = deptMapper.findAllDept();
+        PageResult<DeptVO> pageResult = new PageResult<>(new PageInfo<DeptVO>(deptVOS));
+        return pageResult;
     }
 
     @Override

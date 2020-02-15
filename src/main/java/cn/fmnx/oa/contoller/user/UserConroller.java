@@ -217,7 +217,7 @@ public class UserConroller {
      * @Author: gmf
      * @Date: 2020/2/14
     **/
-    @ApiOperation(value = "")
+    @ApiOperation(value = "根据姓名,用户名，角色，职位，部门，电话模糊查询")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "condition",value = "查询的条件",required = false),
             @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),

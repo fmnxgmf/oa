@@ -3,12 +3,15 @@ package cn.fmnx.oa.contoller.dept;
 import cn.fmnx.oa.common.ResultUtils.ResultModel;
 import cn.fmnx.oa.common.enums.ExceptionEnum;
 import cn.fmnx.oa.common.exception.OaException;
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.dept.dto.AddDeptDTO;
 import cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO;
 import cn.fmnx.oa.contoller.dept.vo.DeptVO;
 import cn.fmnx.oa.service.deptService.impl.DeptServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -41,13 +44,23 @@ public class DeptController {
      * @Date: 2020/2/12
     **/
     @ApiOperation(value = "查找所有部门信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int")
+    })
      @GetMapping("/findAllDept")
-    public ResultModel<DeptVO> findAllDept(){
-       List<DeptVO> depts = deptService.findAllDept();
-       Map map = new HashMap(2);
-       if (!CollectionUtils.isEmpty(depts)){
-           map.put("deptVO",depts);
-           return ResultModel.ok(map,depts.size());
+    public ResultModel<PageResult<DeptVO>> findAllDept(@RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                           @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO ;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+        PageResult<DeptVO> pageResult = deptService.findAllDept(pageDTO);
+
+       if (!CollectionUtils.isEmpty(pageResult.getItems())){
+           return ResultModel.ok(pageResult);
        }else {
            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
        }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.roleMapper.RolePowerMapper">
+
+
+    <insert id="insertRolePower" parameterType="cn.fmnx.oa.contoller.role.dto.RolePowerDTO">
+        insert into aoa_role_power_list(is_show,menu_id,role_id)
+        value(#{rolePowerDTO.isShow},#{rolePowerDTO.menuId},#{rolePowerDTO.roleId})
+    </insert>
+
+    <delete id="deleteRolePower" parameterType="cn.fmnx.oa.contoller.role.dto.RolePowerDTO">
+        delete from aoa_role_power_list where menu_id = #{rolePowerDTO.menuId} and role_id = #{rolePowerDTO.roleId}
+    </delete>
+</mapper>

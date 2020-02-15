@@ -14,6 +14,8 @@ import lombok.*;
 @Getter
 public enum ExceptionEnum {
     FIND_DATA_ISEMPTY(200,"[查询数据为空]"),
+    SET_ROLE_POWER_ERROR(500,"[设置权限失败]"),
+    DELETE_ROLE_POWER_ERROR(500,"[删除权限失败]"),
     CONTENT_TYPE_ERROE(400,"上传文件类型无效！" ),
     INVALID_IMAGE_ERROE(400,"文件内容无效！" ),
     UPLOAD_FAILED_ERROE(400, "文件上传失败！"),

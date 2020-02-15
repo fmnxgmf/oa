@@ -15,7 +15,7 @@ import javax.persistence.Table;
  * @Version V1.0
  **/
 @Data
-@Table(name = "aoa_role")
+@Table(name = "aoa_role_")
 public class Role {
     /**
      * //角色id

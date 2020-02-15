@@ -42,11 +42,11 @@ public class AddMenuDTO {
     /**
      *排序
      */
-    @ApiModelProperty(value = "排序值")
+    @ApiModelProperty(value = "排序值",name = "sortId",example = "2")
     private Integer sortId;
     /**
      * 菜单是否显示 1 显示
      */
-    @ApiModelProperty(value = "菜单是否显示 1为显示")
+    @ApiModelProperty(value = "菜单是否显示 1为显示",name = "isShow",dataType = "int",example = "1")
     private Integer isShow;
 }

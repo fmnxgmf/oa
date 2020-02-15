@@ -3,12 +3,15 @@ package cn.fmnx.oa.contoller.position;
 import cn.fmnx.oa.common.ResultUtils.ResultModel;
 import cn.fmnx.oa.common.enums.ExceptionEnum;
 import cn.fmnx.oa.common.exception.OaException;
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.position.dto.PositionDTO;
 import cn.fmnx.oa.contoller.position.vo.PositionIdNameVO;
 import cn.fmnx.oa.contoller.position.vo.PositionVO;
 import cn.fmnx.oa.service.positiionService.impl.PositionServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -41,12 +44,22 @@ public class PositionController {
     **/
     @ApiOperation(value = "查找所有职位的信息")
     @GetMapping("/findAll")
-    public ResultModel<PositionVO> findAllPostion(){
-        List<PositionVO> positionVOS = positionService.findAllPosition();
-        Map map = new HashMap(2);
-        if (! CollectionUtils.isEmpty(positionVOS)){
-            map.put("positionVOS",positionVOS);
-            return ResultModel.ok(map,positionVOS.size());
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int")
+    })
+    public ResultModel<PageResult<PositionVO>> findAllPostion(@RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                              @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO ;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+        PageResult<PositionVO> pageResult = positionService.findAllPosition(pageDTO);
+
+        if (! CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
         }else {
             throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
         }

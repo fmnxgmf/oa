@@ -19,7 +19,7 @@ public class PositionDTO implements Serializable {
 
     @ApiModelProperty(name = "positionId",value = "职位id,修改职位表需要id，添加职位不需要id，id自动生成",required = false)
     private Long positionId;
-    @ApiModelProperty(value = "职位层级",name = "level")
+    @ApiModelProperty(value = "职位层级",name = "level",dataType = "int",example = "1")
     private Integer level;
     @ApiModelProperty(name = "name",value = "职位名字")
     private String name;

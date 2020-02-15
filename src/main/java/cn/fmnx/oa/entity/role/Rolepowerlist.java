@@ -21,15 +21,11 @@ public class Rolepowerlist {
     @Id
     @KeySql(useGeneratedKeys = true)
     @Column(name = "pk_id")
-    private Integer pkId;
+    private Long pkId;
     @Column(name = "role_id")
-    private Integer roleId;
-
-
+    private Long roleId;
     @Column(name = "menu_id")
-    private Menu menuId;
-
-
+    private Long menuId;
     @Column(name="is_show")
-    private Boolean check=false;
+    private Integer isShow;
 }

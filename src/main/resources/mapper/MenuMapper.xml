@@ -79,4 +79,12 @@
             </if>
         </where>
     </select>
+    <select id="findRoleMenus" resultType="cn.fmnx.oa.contoller.role.vo.RoleMenuVO">
+        select
+            m.menu_id,
+            m.menu_name,
+            m.menu_url,
+            m.is_show
+        from aoa_sys_menu m order by if(isnull(m.parent_id),1,0),m.parent_id asc
+    </select>
 </mapper>

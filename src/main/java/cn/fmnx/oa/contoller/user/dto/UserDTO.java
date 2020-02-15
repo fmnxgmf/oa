@@ -26,7 +26,7 @@ public class UserDTO implements Serializable {
      */
     @ApiModelProperty(name = "userId",value = "用户id")
     @NotNull(message = "id不能为空")
-    private Integer userId;
+    private Long userId;
     /**
      * 登录用户名
      */
@@ -135,17 +135,17 @@ public class UserDTO implements Serializable {
      * //外键关联 职位表
      */
     @ApiModelProperty(name = "positionId",value = "职位id")
-    private Integer positionId;
+    private Long positionId;
 
     /**
      * //外键关联 部门表
      */
     @ApiModelProperty(name = "deptId",value = "部门id")
-    private Integer deptId;
+    private Long deptId;
 
     /**
      * //外键关联 角色表
      */
     @ApiModelProperty(name = "roleId",value = "角色id")
-    private Integer roleId;
+    private Long roleId;
 }

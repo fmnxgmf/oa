@@ -2,6 +2,7 @@ package cn.fmnx.oa.mapper.menuMapper;
 
 import cn.fmnx.oa.contoller.menu.vo.MenuVO;
 import cn.fmnx.oa.contoller.menu.vo.ParentMenuVO;
+import cn.fmnx.oa.contoller.role.vo.RoleMenuVO;
 import cn.fmnx.oa.entity.menu.Menu;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -66,4 +67,7 @@ public interface MenuMapper extends Mapper<Menu> {
     int chageOtherSortId(@Param("parentId")Long parentId, @Param("sortId")Integer sortId, @Param("menuId")Long menuId, @Param("step")Integer step);
 
     List<MenuVO> findMenuByLikeName(@Param("menuName") String menuName);
+
+    List<RoleMenuVO> findRoleMenus();
+
 }

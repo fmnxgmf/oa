@@ -1,5 +1,7 @@
 package cn.fmnx.oa.service.positiionService.impl;
 
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.common.utils.CopyListutils;
 import cn.fmnx.oa.contoller.position.dto.PositionDTO;
 import cn.fmnx.oa.contoller.position.vo.PositionIdNameVO;
@@ -7,6 +9,8 @@ import cn.fmnx.oa.contoller.position.vo.PositionVO;
 import cn.fmnx.oa.entity.position.Position;
 import cn.fmnx.oa.mapper.positionMapper.PositionMapper;
 import cn.fmnx.oa.service.positiionService.PositionService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +34,14 @@ public class PositionServiceImpl implements PositionService {
     @Resource
     private PositionMapper positionMapper;
     @Override
-    public List<PositionVO> findAllPosition() {
+    public PageResult<PositionVO> findAllPosition(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
         List<Position> positions = positionMapper.selectAll();
         List<PositionVO> positionVOS = new ArrayList<>();
         CopyListutils.copyListBeanUtils(positions,positionVOS,PositionVO.class);
         if (!CollectionUtils.isEmpty(positionVOS)){
-            return positionVOS;
+            PageResult<PositionVO> pageResult = new PageResult<>(new PageInfo<PositionVO>(positionVOS));
+            return pageResult;
         }else {
             return null;
         }
