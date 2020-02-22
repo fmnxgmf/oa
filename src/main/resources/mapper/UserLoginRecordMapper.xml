@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.userMapper.UserLoginRecordMapper">
+
+    <select id="showUserLoginRecord" resultType="cn.fmnx.oa.contoller.user.vo.UserLoginRecordVO">
+        select
+           ul.browser,
+           ul.ip_addr,
+           date_format(ul.login_time,'%Y-%m-%d %H:%i:%S') AS loginTime,
+           u.user_name
+        from aoa_user_login_record as ul
+        join aoa_user as u on u.user_id = ul.user_id
+        order by ul.login_time desc
+    </select>
+    <select id="showLikeUserLoginRecord" resultType="cn.fmnx.oa.contoller.user.vo.UserLoginRecordVO">
+        select
+           ul.browser,
+           ul.ip_addr,
+           date_format(ul.login_time,'%Y-%m-%d %H:%i:%S') AS loginTime,
+           u.user_name
+        from aoa_user_login_record as ul
+        join aoa_user as u on u.user_id = ul.user_id
+        <where>
+            <if test="condition !=null and condition !=''">
+                and concat(ifnull(ul.ip_addr,''),ifnull(u.user_name,'')) like '%${condition}%'
+            </if>
+        </where>
+        order by ul.login_time desc
+    </select>
+</mapper>

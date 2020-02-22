@@ -21,7 +21,7 @@ public class RoleMenuVO implements Serializable {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id")
+    @ApiModelProperty(value = "菜单id",example = "1")
     private Long menuId;
     /**
      * 菜单名称

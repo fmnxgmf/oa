@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class PositionIdNameVO implements Serializable {
 
     private static final long serialVersionUID = -1843802187886773258L;
-    @ApiModelProperty(name = "positionId",value = "部门id")
+    @ApiModelProperty(name = "positionId",value = "部门id",example = "1")
     private Long positionId;
     @ApiModelProperty(name = "name",value = "部门名称")
     private String name;

@@ -21,7 +21,7 @@ public class TypeListVO implements Serializable {
     /**
      * id
      */
-    @ApiModelProperty(value = "类型id",name = "typeId")
+    @ApiModelProperty(value = "类型id",name = "typeId",example = "1")
     private Long typeId;
     /**
      * 模块
@@ -36,7 +36,7 @@ public class TypeListVO implements Serializable {
     /**
      * 排序值
      */
-    @ApiModelProperty(value = "排序值",name = "typeSortValue")
+    @ApiModelProperty(value = "排序值",name = "typeSortValue",example = "1")
     private Integer typeSortValue;
 
 }

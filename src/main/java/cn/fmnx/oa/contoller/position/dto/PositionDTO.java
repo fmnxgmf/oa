@@ -17,7 +17,7 @@ import java.io.Serializable;
 @ApiModel(description = "添加或修改职位的数据对象")
 public class PositionDTO implements Serializable {
 
-    @ApiModelProperty(name = "positionId",value = "职位id,修改职位表需要id，添加职位不需要id，id自动生成",required = false)
+    @ApiModelProperty(name = "positionId",value = "职位id,修改职位表需要id，添加职位不需要id，id自动生成",required = false,example = "1")
     private Long positionId;
     @ApiModelProperty(value = "职位层级",name = "level",dataType = "int",example = "1")
     private Integer level;
@@ -25,6 +25,6 @@ public class PositionDTO implements Serializable {
     private String name;
     @ApiModelProperty(name = "describtion",value = "该职位的描述信息")
     private String describtion;
-    @ApiModelProperty(name = "deptId",value = "该职位对应的部门id")
+    @ApiModelProperty(name = "deptId",value = "该职位对应的部门id",example = "1")
     private Long deptId;
 }

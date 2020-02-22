@@ -14,6 +14,9 @@ import lombok.*;
 @Getter
 public enum ExceptionEnum {
     FIND_DATA_ISEMPTY(200,"[查询数据为空]"),
+    ADD_MAIL_ACCOUNT_FAIL(500,"[新增邮箱账户失败]"),
+    FIND_DEPT_MANAGER_FAIL(200,"[查询部门经理失败]"),
+    USER_LOGIN_RECORD_FAIL(500,"[用户登录记录保存失败]"),
     SET_ROLE_POWER_ERROR(500,"[设置权限失败]"),
     DELETE_ROLE_POWER_ERROR(500,"[删除权限失败]"),
     CONTENT_TYPE_ERROE(400,"上传文件类型无效！" ),

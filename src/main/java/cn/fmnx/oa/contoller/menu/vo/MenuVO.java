@@ -32,7 +32,7 @@ public class MenuVO implements Serializable {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id")
+    @ApiModelProperty(value = "菜单id",example = "1")
     private Long menuId;
     /**
      * 菜单名称
@@ -57,12 +57,12 @@ public class MenuVO implements Serializable {
     /**
      *排序
      */
-    @ApiModelProperty(value = "排序值")
+    @ApiModelProperty(value = "排序值",example = "1")
     private Integer sortId;
     /**
      * 菜单是否显示 1 显示
      */
-    @ApiModelProperty(value = "菜单是否显示 1为显示")
+    @ApiModelProperty(value = "菜单是否显示 1为显示",example = "1")
     private Integer isShow;
 
     private ParentMenuVO parentMenuVO;

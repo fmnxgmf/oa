@@ -24,7 +24,7 @@ public class Position {
     /**
      * //职位id
      */
-    private Long id;
+    private Long positionId;
     /**
      * //职位名称。
      */

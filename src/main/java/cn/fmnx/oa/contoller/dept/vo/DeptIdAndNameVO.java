@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class DeptIdAndNameVO implements Serializable {
 
     private static final long serialVersionUID = 7831293899836323411L;
-    @ApiModelProperty(name = "deptId",value = "部门的id",notes = "此id用于前后端转递")
+    @ApiModelProperty(name = "deptId",value = "部门的id",notes = "此id用于前后端转递",example = "1")
     private Long deptId;
     @ApiModelProperty(name = "deptName",value = "部门名称",notes = "前端展示数据有部门名称，后端需要id")
     private String deptName;

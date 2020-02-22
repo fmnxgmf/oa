@@ -26,22 +26,22 @@ public class PageResult<T> {
     /**
      * //总页数
      */
-    @ApiModelProperty(name = "totalPage",value = "总页数")
+    @ApiModelProperty(name = "totalPage",value = "总页数",example = "29")
     private Integer totalPage;
     /**
      * //当前页
      */
-    @ApiModelProperty(name = "pageNum",value = "当前页")
+    @ApiModelProperty(name = "pageNum",value = "当前页",example = "2")
     private int pageNum;
     /**
      * //每页的数量
      */
-    @ApiModelProperty(name = "pageSize",value = "每页的数量")
+    @ApiModelProperty(name = "pageSize",value = "每页的数量",example = "5")
     private int pageSize;
     /**
      * //当前页的数量
      */
-    @ApiModelProperty(name = "size",value = "当前页的数量")
+    @ApiModelProperty(name = "size",value = "当前页的数量",example = "3")
     private int size;
     /**
      * 包装的数据对象

@@ -1,7 +1,9 @@
 package cn.fmnx.oa.dept;
 
 import cn.fmnx.oa.common.utils.CopyListutils;
+import cn.fmnx.oa.contoller.dept.vo.DeptUserVO;
 import cn.fmnx.oa.contoller.dept.vo.DeptVO;
+import cn.fmnx.oa.contoller.position.vo.PositionIdNameVO;
 import cn.fmnx.oa.entity.dept.Dept;
 import cn.fmnx.oa.mapper.deptMapper.DeptMapper;
 import cn.fmnx.oa.service.deptService.impl.DeptServiceImpl;
@@ -84,4 +86,19 @@ public class DeptDemo {
     public void findAllDeptIdName(){
         deptMapper.findAllDeptIdAndName().forEach(System.out::println);
     }
+    @Test
+    public void findUserBydeptId(){
+        deptMapper.findUserBydeptId(1L).forEach(System.out::println);
+    }
+    @Test
+    public void findManagerBydeptId(){
+        DeptUserVO deptManagerById = deptMapper.findDeptManagerById(1L);
+        System.out.println("deptManagerById = " + deptManagerById);
+    }
+    @Test
+    public void findPositionById(){
+        List<PositionIdNameVO> positionByDeptId = deptMapper.findPositionByDeptId(2L);
+        System.out.println("positionByDeptId = " + positionByDeptId);
+    }
+
 }

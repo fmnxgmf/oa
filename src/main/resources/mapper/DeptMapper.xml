@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.fmnx.oa.mapper.deptMapper.DeptMapper">
+    <update id="changeDeptAndPosition">
+        update  aoa_user as u
+        <set>
+            <if test="changeDeptPositionDTO.deptId !=null">
+                u.dept_id = #{changeDeptPositionDTO.deptId},
+            </if>
+            <if test="changeDeptPositionDTO.positionId !=null">
+                u.position_id = #{changeDeptPositionDTO.positionId}
+            </if>
+        </set>
+        <where>
+            <if test="changeDeptPositionDTO.userId !=null">
+               and u.user_id = #{changeDeptPositionDTO.userId}
+            </if>
+            and u.role_id not in(3,4)
+        </where>
+    </update>
+    <update id="changeManagerTwo">
+        update  aoa_user as u set u.role_id = #{changeManagerDTO.oldRoleId},u.dept_id = #{changeManagerDTO.oldDeptId},u.position_id = #{changeManagerDTO.oldPositionId}
+        where u.user_id = #{changeManagerDTO.newUserId}
+    </update>
+    <update id="changeManagerOne">
+        update aoa_user as u set u.position_id = #{changeManagerDTO.positionId},u.dept_id = #{changeManagerDTO.deptId},
+        <choose>
+            <when test="changeManagerDTO.deptId = 1">
+                u.role_id = 2
+            </when>
+            <otherwise>
+                u.role_id = 5
+            </otherwise>
+        </choose>
+        where u.user_id = #{changeManagerDTO.userId}
+    </update>
 
     <select id="findAllDept" resultType="cn.fmnx.oa.contoller.dept.vo.DeptVO">
         select
@@ -16,5 +49,56 @@
         dept.dept_id,
         dept.dept_name
         from aoa_dept as dept
+    </select>
+    <select id="findUserBydeptId" resultType="cn.fmnx.oa.contoller.dept.vo.DeptUserVO">
+        select
+        u.user_id,
+        u.img_path,
+        u.real_name,
+        u.user_name,
+        p.name as positionName
+        from aoa_dept as d
+        join aoa_user as u on u.dept_id = d.dept_id
+        join aoa_position as p on p.position_id = u.position_id
+        JOIN aoa_role_ as r on r.role_id = u.role_id
+        <where>
+            <if test="deptId !=null">
+                and d.dept_id = #{deptId}
+            </if>
+            and r.role_id not in(3,4)
+        </where>
+        order by if(isnull(p.level),1,0), p.level asc
+    </select>
+    <select id="findDeptManagerById" resultType="cn.fmnx.oa.contoller.dept.vo.DeptUserVO">
+        select
+        u.role_id,
+        u.user_id,
+        u.img_path,
+        u.real_name,
+        u.user_name,
+        p.name as positionName
+        from aoa_dept as d
+        join aoa_user as u on u.dept_id = d.dept_id
+        join aoa_position as p on p.position_id = u.position_id
+        JOIN aoa_role_ as r on r.role_id = u.role_id
+        <where>
+            <if test="deptId !=null">
+                and d.dept_id = #{deptId}
+            </if>
+            and r.role_id  in(3,4)
+        </where>
+    </select>
+    <select id="findPositionByDeptId" resultType="cn.fmnx.oa.contoller.position.vo.PositionIdNameVO">
+        select distinct
+        p.position_id,
+        p.name
+        from aoa_position as p
+        join aoa_user as u on u.position_id = p.position_id
+        <where>
+            <if test="deptId !=null">
+                and p.deptid = #{deptId}
+            </if>
+        </where>
+        and u.role_id not in(3,4)
     </select>
 </mapper>

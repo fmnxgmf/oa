@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @ApiModel(description = "新增菜单中父级菜单的model对象，前端用name展示，给后端需要是id值")
 public class ParentMenuVO {
-    @ApiModelProperty(name = "parentId",value = "新增菜单父级菜单的id值")
+    @ApiModelProperty(name = "parentId",value = "新增菜单父级菜单的id值",example = "1")
     private Long parentId;
     @ApiModelProperty(name = "name",value = "新增菜单中父级菜单在前端展示的名字，传入后端需要的是id值")
     private String parentName;

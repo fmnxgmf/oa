@@ -21,7 +21,7 @@ public class AddDeptDTO implements Serializable {
     /**
      * 部门id
      */
-    @ApiModelProperty(name = "deptId",value = "部门id，修改必须传id值，添加不用传id")
+    @ApiModelProperty(name = "deptId",value = "部门id，修改必须传id值，添加不用传id",example = "2")
     private Long deptId;
     /**
      * 名称

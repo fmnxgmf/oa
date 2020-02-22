@@ -18,7 +18,7 @@ public class RoleIdAndNameVO {
     /**
      * //角色id
      */
-    @ApiModelProperty(name = "roleId",value = "角色id")
+    @ApiModelProperty(name = "roleId",value = "角色id",example = "1")
     private Long roleId;
     /**
      * //角色名

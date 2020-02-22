@@ -17,7 +17,7 @@ public class DeptVO {
     /**
      * 部门id
      */
-    @ApiModelProperty(name = "deptId",value = "部门id")
+    @ApiModelProperty(name = "deptId",value = "部门id",example = "1")
     private Long deptId;
     /**
      * 名称

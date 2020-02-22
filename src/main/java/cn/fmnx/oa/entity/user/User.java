@@ -31,7 +31,7 @@ public class User {
     /**
      * 用户id
      */
-    private Integer userId;
+    private Long userId;
     /**
      * 登录用户名
      */
@@ -166,7 +166,7 @@ public class User {
 
     private Integer roleId;			//外键关联 角色表
 
-    public User(Integer userId, @NotBlank(message = "用户名不能为空") String userName) {
+    public User(Long userId, @NotBlank(message = "用户名不能为空") String userName) {
         this.userId = userId;
         this.userName = userName;
     }

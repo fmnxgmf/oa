@@ -21,17 +21,17 @@ public class ResultModel<T> implements Serializable {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     //响应业务状态码
-    @ApiModelProperty(value = "返回的状态码",example = "200")
+    @ApiModelProperty(value = "返回的状态码",example = "200",name = "code")
     private Integer code;
 
     // 响应消息
-    @ApiModelProperty(value = "返回响应消息")
+    @ApiModelProperty(value = "返回响应消息",name = "msg")
     private String msg;
 
     /**
      * 返回数据量
      */
-    @ApiModelProperty(value = "返回的数据量")
+    @ApiModelProperty(name = "count",value = "返回的数据量",example = "200")
     private Integer count;
 
 

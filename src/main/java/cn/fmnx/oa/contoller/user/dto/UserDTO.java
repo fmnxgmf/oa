@@ -24,7 +24,7 @@ public class UserDTO implements Serializable {
     /**
      * 用户id
      */
-    @ApiModelProperty(name = "userId",value = "用户id")
+    @ApiModelProperty(name = "userId",value = "用户id",example = "1")
     @NotNull(message = "id不能为空")
     private Long userId;
     /**
@@ -118,8 +118,8 @@ public class UserDTO implements Serializable {
     /**
      * //用户薪水
      */
-    @ApiModelProperty(name = "salary",value = "用户薪水",required = true)
-    private String salary;
+    @ApiModelProperty(name = "salary",value = "用户薪水",required = true,example = "1000.0")
+    private float salary;
     /**
      * //用户头像路径
      */
@@ -134,18 +134,18 @@ public class UserDTO implements Serializable {
     /**
      * //外键关联 职位表
      */
-    @ApiModelProperty(name = "positionId",value = "职位id")
+    @ApiModelProperty(name = "positionId",value = "职位id",example = "1")
     private Long positionId;
 
     /**
      * //外键关联 部门表
      */
-    @ApiModelProperty(name = "deptId",value = "部门id")
+    @ApiModelProperty(name = "deptId",value = "部门id",example = "1")
     private Long deptId;
 
     /**
      * //外键关联 角色表
      */
-    @ApiModelProperty(name = "roleId",value = "角色id")
+    @ApiModelProperty(name = "roleId",value = "角色id",example = "1")
     private Long roleId;
 }

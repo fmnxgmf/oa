@@ -18,7 +18,7 @@ public class AddTypeListDTO {
     /**
      * id
      */
-    @ApiModelProperty(value = "类型id值",name = "typeId",required = false,example = "49")
+    @ApiModelProperty(value = "类型id值",name = "typeId",example = "49")
     private Long TypeId;
     /**
      * 模块

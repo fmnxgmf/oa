@@ -17,7 +17,7 @@ public class AddMenuDTO {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id")
+    @ApiModelProperty(value = "菜单id",example = "1")
     private Long menuId;
     /**
      * 菜单名称
@@ -37,7 +37,7 @@ public class AddMenuDTO {
     /**
      * 父级菜单
      */
-    @ApiModelProperty(value = "给后端专递许id值，不能是name值")
+    @ApiModelProperty(value = "给后端专递许id值，不能是name值",example = "1")
     private Long parentId;
     /**
      *排序

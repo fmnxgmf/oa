@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class AddStatusDTO implements Serializable {
 
     private static final long serialVersionUID = -7891635722963740374L;
-    @ApiModelProperty(name = "statusId",value = "状态id，添加时不用添加id，修改时需要添加id到后端",required = false)
+    @ApiModelProperty(name = "statusId",value = "状态id，添加时不用添加id，修改时需要添加id到后端",required = false,example = "1")
     private Long statusId;
     @ApiModelProperty(name = "statusModel",value = "模块",required = true,example = "aoa_mailnumber")
     private String statusModel;

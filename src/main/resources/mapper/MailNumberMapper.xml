@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.mailMapper.MailNumberMapper">
+
+    <select id="findMailByUserId" resultType="cn.fmnx.oa.contoller.mail.vo.MailAccountsVO">
+        select
+            mail.mail_number_id,
+            mail.mail_account,
+            date_format(mail.mail_create_time,'%Y-%m-%d %H:%i:%S') as mailCreateTime,
+            mail.mail_type,
+            mail.mail_user_name,
+            mail.status
+        from aoa_mailnumber as mail
+        <where>
+            <if test="userId !=null">
+                and mail_num_user_id = #{userId}
+            </if>
+        </where>
+    </select>
+    <select id="findMailByLike" resultType="cn.fmnx.oa.contoller.mail.vo.MailAccountsVO">
+        select
+        mail.mail_number_id,
+        mail.mail_account,
+        date_format(mail.mail_create_time,'%Y-%m-%d %H:%i:%S') as mailCreateTime,
+        mail.mail_type,
+        mail.mail_user_name,
+        mail.status
+        from aoa_mailnumber as mail
+        <where>
+            <if test="userId !=null">
+                and mail.mail_num_user_id = #{userId}
+            </if>
+            <if test="condition !=null and condition != ''">
+                and mail.mail_user_name like '%${condition}%'
+            </if>
+        </where>
+    </select>
+</mapper>

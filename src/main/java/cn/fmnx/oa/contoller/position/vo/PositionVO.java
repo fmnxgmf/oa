@@ -26,9 +26,9 @@ public class PositionVO implements Serializable {
      * describtion
      * deptid` big
      */
-    @ApiModelProperty(name = "positionId",value = "职位id")
+    @ApiModelProperty(name = "positionId",value = "职位id",example = "1")
     private Long positionId;
-    @ApiModelProperty(value = "职位层级",name = "level")
+    @ApiModelProperty(value = "职位层级",name = "level",example = "1")
     private Integer level;
     @ApiModelProperty(name = "name",value = "职位名字")
     private String name;

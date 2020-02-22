@@ -6,13 +6,14 @@ import cn.fmnx.oa.common.exception.OaException;
 import cn.fmnx.oa.common.page.PageDTO;
 import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.dept.dto.AddDeptDTO;
+import cn.fmnx.oa.contoller.dept.dto.ChangeDeptPositionDTO;
+import cn.fmnx.oa.contoller.dept.dto.ChangeManagerDTO;
 import cn.fmnx.oa.contoller.dept.vo.DeptIdAndNameVO;
+import cn.fmnx.oa.contoller.dept.vo.DeptUserVO;
 import cn.fmnx.oa.contoller.dept.vo.DeptVO;
+import cn.fmnx.oa.contoller.position.vo.PositionIdNameVO;
 import cn.fmnx.oa.service.deptService.impl.DeptServiceImpl;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -163,5 +164,111 @@ public class DeptController {
        }else {
            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
        }
+    }
+    /**
+     * @MethodName: findUserByDeptId
+     * @Description: 某部门人事信息查询,除去了该部门经理一职没有展示
+     * @Param: [deptId, pageNum, pageSize]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.common.page.PageResult<cn.fmnx.oa.contoller.dept.vo.DeptUserVO>>
+     * @Author: gmf
+     * @Date: 2020/2/16
+    **/
+    @ApiOperation(value = "某部门人事信息查询,除去了该部门经理一职没有展示")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int")
+    })
+    public ResultModel<PageResult<DeptUserVO>> findUserByDeptId(@RequestParam("deptId") Long deptId,
+                                                    @RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                    @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO ;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+        PageResult<DeptUserVO> pageResult = deptService.findUserByDeptId(deptId,pageDTO);
+        if (!CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: findDeptManagerById
+     * @Description: 根据部门id查找该部门的经理
+     * @Param: [deptId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.dept.vo.DeptUserVO>
+     * @Author: gmf
+     * @Date: 2020/2/16
+    **/
+    @ApiOperation(value = "根据部门id查找该部门的经理")
+    @GetMapping("/findDeptManagerById")
+    public ResultModel<DeptUserVO> findDeptManagerById(@RequestParam("deptId")
+                                                           @ApiParam(name = "deptId",value = "部门id",required = true) Long deptId){
+        DeptUserVO deptUserVO = deptService.findDeptManagerById(deptId);
+        Map map = new HashMap(2);
+        if (!StringUtils.isEmpty(deptUserVO)){
+            map.put("deptUserVO",deptUserVO);
+            return ResultModel.ok(map);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DEPT_MANAGER_FAIL);
+        }
+    }
+    /**
+     * @MethodName: findPositionByDeptId
+     * @Description: 根据部门id查找该部门下的所有职位
+     * @Param: [deptId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.position.vo.PositionIdNameVO>
+     * @Author: gmf
+     * @Date: 2020/2/16
+    **/
+    @ApiOperation(value = "根据部门id查找该部门下的所有职位[部门经理除外]")
+    @GetMapping("/findPositonByDeptId")
+    public ResultModel<PositionIdNameVO> findPositionByDeptId(@RequestParam("deptId")@ApiParam(name = "deptId",value = "部门id",required = true)Long deptId){
+       List<PositionIdNameVO>  list = deptService.findPositionByDeptId(deptId);
+       Map map = new HashMap(2);
+       if (!CollectionUtils.isEmpty(list)){
+           map.put("PositionIdNameVO",list);
+           return ResultModel.ok(map,list.size());
+       }else {
+           throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+       }
+    }
+    /**
+     * @MethodName: changeDeptAndPosition
+     * @Description: [非部门经理的]人事变动的接口
+     * @Param: [changeDeptPositionDTO]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/16
+    **/
+    @ApiOperation(value = "[非部门经理的]人事变动的接口")
+    @PutMapping("/changeDeptPosition")
+    public ResultModel changeDeptAndPosition(@RequestBody ChangeDeptPositionDTO changeDeptPositionDTO){
+       boolean flag = deptService.changeDeptAndPosition(changeDeptPositionDTO);
+       if (flag){
+           return ResultModel.ok("部门人事变动修改成功");
+       }else {
+           throw new OaException(ExceptionEnum.UPDATE_DATA_LIST_ERROR);
+       }
+    }
+    /**
+     * @MethodName: changeManager
+     * @Description: 经理级别的人事变动
+     * @Param: [changeDeptPositionDTO]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/16
+    **/
+    @ApiOperation(value = "经理级别的人事变动")
+    @PutMapping("/changeManager")
+    public ResultModel changeManager(@RequestBody ChangeManagerDTO changeManagerDTO){
+        boolean flag = deptService.changeManager(changeManagerDTO);
+        if (flag){
+            return ResultModel.ok("部门经理的人事变动修改成功");
+        }else {
+            throw new OaException(ExceptionEnum.UPDATE_DATA_LIST_ERROR);
+        }
     }
 }

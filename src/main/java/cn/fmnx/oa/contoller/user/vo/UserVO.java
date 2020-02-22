@@ -26,8 +26,8 @@ public class UserVO implements Serializable {
     /**
      * 用户id
      */
-    @ApiModelProperty(name = "userId",value = "用户id")
-    private Integer userId;
+    @ApiModelProperty(name = "userId",value = "用户id",example = "1")
+    private Long userId;
     /**
      * 登录用户名
      */
