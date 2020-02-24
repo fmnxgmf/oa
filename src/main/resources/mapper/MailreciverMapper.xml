@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.mailMapper.MailreciverMapper">
+
+    <select id="showMailInBox" resultType="cn.fmnx.oa.contoller.mail.vo.MailInBoxVO">
+        select
+        r.is_star as star,
+        date_format(m.mail_create_time,'%Y-%m-%d %H:%i:%S') as mailCreateTime,
+        m.mail_content as content,
+        m.mail_title,
+        m.mail_type,
+        r.mail_id,
+        m.mail_status_id as mailStatusid,
+        u.user_name as mailUserName,
+        m.mail_in_push_user_id as mailUserid,
+        a.attachment_id as mailFileid,
+        a.attachment_path as path
+        from aoa_mail_reciver as r
+        join aoa_in_mail_list as m on m.mail_id = r.mail_id
+        join aoa_user as u on u.user_id = m.mail_in_push_user_id
+        join aoa_attachment_list as a on a.attachment_id = m.mail_file_id
+        <where>
+            <if test="userId !=null">
+                and r.mail_reciver_id = #{userId}
+            </if>
+            and r.is_del = 0
+        </where>
+    </select>
+</mapper>

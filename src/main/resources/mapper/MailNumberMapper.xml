@@ -35,4 +35,30 @@
             </if>
         </where>
     </select>
+    <select id="findMailNumType" resultType="cn.fmnx.oa.contoller.mail.vo.MailNumTypeVO">
+        select
+        t.type_id,
+        t.type_name
+        from aoa_type_list t
+        where t.type_model = 'aoa_mailnumber'
+    </select>
+    <select id="findMailNumStatus" resultType="cn.fmnx.oa.contoller.mail.vo.MailNumStatusVO">
+        select
+        s.status_id,
+        s.status_name
+        from aoa_status_list s
+        where s.status_model = 'aoa_mailnumber'
+    </select>
+    <select id="findMailUsers" resultType="cn.fmnx.oa.contoller.mail.vo.MailBooksVO">
+        select
+        u.user_id,
+        u.eamil,
+        u.user_name
+        from aoa_user u
+        <where>
+            <if test="userId !=null">
+                and u.user_id <![CDATA[!=]]> #{userId}
+            </if>
+        </where>
+    </select>
 </mapper>

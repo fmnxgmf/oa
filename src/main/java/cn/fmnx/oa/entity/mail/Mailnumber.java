@@ -30,7 +30,7 @@ public class Mailnumber {
     @Column(name="mail_type")
     private Long mailType;
     /**
-     * //邮件状态（是否可用）
+     * //邮件状态（是否可用 1有效 2.无效）
      */
     @Column(name="status")
     private Long status;

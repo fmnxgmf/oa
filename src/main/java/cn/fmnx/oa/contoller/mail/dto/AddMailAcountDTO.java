@@ -30,7 +30,7 @@ public class AddMailAcountDTO implements Serializable {
     /**
      * 邮件状态
      */
-    @ApiModelProperty(name = "status",value = "邮件状态(1=有效，2=w无效)")
+    @ApiModelProperty(name = "status",value = "邮件状态(1=有效，2=w无效)",example = "1")
     private Long status;
     /**
      * 发件昵称

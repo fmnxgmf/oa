@@ -61,7 +61,7 @@ public class Inmaillist {
     /**
      * //邮件附件id
      */
-    @Column(name = "Integer")
+    @Column(name = "mail_file_id")
     private Long mailFileid;
     /**
      * //邮件创建时间

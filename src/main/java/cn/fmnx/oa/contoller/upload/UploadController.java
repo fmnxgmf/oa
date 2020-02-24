@@ -45,7 +45,7 @@ public class UploadController {
     **/
     @PostMapping("/image")
     @ApiOperation(value = "上传图片的接口，返回一个图片的链接地址imgUrl的值",notes="文件上传图片")
-    public ResultModel uploadImage(@RequestParam("file")@ApiParam(value = "上传的文件类型为MultipartFile的格式，大小设置不大于5M" ,required = true) MultipartFile file){
+    public ResultModel uploadImage(@RequestParam("file")@ApiParam(value = "上传的文件类型为MultipartFile的格式，大小设置不大于20M" ,required = true) MultipartFile file){
         String imgUrl = uploadService.uploadImage(file);
         Map map = new HashMap(2);
         if (!StringUtils.isEmpty(imgUrl)){
@@ -55,4 +55,17 @@ public class UploadController {
             throw new OaException(ExceptionEnum.UPLOAD_FAILED_ERROE);
         }
     }
+    @PostMapping("/file")
+    @ApiOperation(value = "上传文件的接口,用于系统文件上传和附件保存")
+    public ResultModel uploadFile(@RequestParam("file")@ApiParam(value = "上传的文件类型为MultipartFile的格式，大小设置不大于20M" ,required = true) MultipartFile file){
+        String fileUrl = uploadService.uploadFile(file);
+        Map map = new HashMap(2);
+        if (!StringUtils.isEmpty(fileUrl)){
+            map.put("imgUrl",fileUrl);
+            return ResultModel.ok(map);
+        }else {
+            throw new OaException(ExceptionEnum.UPLOAD_FAILED_ERROE);
+        }
+    }
+
 }

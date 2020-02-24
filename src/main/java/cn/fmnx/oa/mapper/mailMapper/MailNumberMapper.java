@@ -2,6 +2,9 @@ package cn.fmnx.oa.mapper.mailMapper;
 
 
 import cn.fmnx.oa.contoller.mail.vo.MailAccountsVO;
+import cn.fmnx.oa.contoller.mail.vo.MailBooksVO;
+import cn.fmnx.oa.contoller.mail.vo.MailNumStatusVO;
+import cn.fmnx.oa.contoller.mail.vo.MailNumTypeVO;
 import cn.fmnx.oa.entity.mail.Mailnumber;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
@@ -19,4 +22,11 @@ public interface MailNumberMapper extends Mapper<Mailnumber> {
     List<MailAccountsVO> findMailByUserId(@Param("userId") Long userId);
 
     List<MailAccountsVO> findMailByLike(@Param("userId") Long userId, @Param("condition") String condition);
+
+    List<MailNumTypeVO> findMailNumType();
+
+
+    List<MailNumStatusVO> findMailNumStatus();
+
+    List<MailBooksVO> findMailUsers(@Param("userId") Long userId);
 }

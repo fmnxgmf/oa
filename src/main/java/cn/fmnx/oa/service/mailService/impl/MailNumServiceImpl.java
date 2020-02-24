@@ -2,8 +2,9 @@ package cn.fmnx.oa.service.mailService.impl;
 
 import cn.fmnx.oa.common.page.PageDTO;
 import cn.fmnx.oa.common.page.PageResult;
+import cn.fmnx.oa.common.utils.CopyListutils;
 import cn.fmnx.oa.contoller.mail.dto.AddMailAcountDTO;
-import cn.fmnx.oa.contoller.mail.vo.MailAccountsVO;
+import cn.fmnx.oa.contoller.mail.vo.*;
 import cn.fmnx.oa.entity.mail.Mailnumber;
 import cn.fmnx.oa.mapper.mailMapper.MailNumberMapper;
 import cn.fmnx.oa.service.mailService.MailNumService;
@@ -12,9 +13,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -89,5 +92,47 @@ public class MailNumServiceImpl implements MailNumService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<MailNumVO> findMailNum(Long userId) {
+        Mailnumber mailnumber = new Mailnumber();
+        mailnumber.setMailUserId(userId);
+        List<Mailnumber> mailnumbers = mailNumberMapper.select(mailnumber);
+        List<MailNumVO> mailNumVOS = new ArrayList<>();
+        if (mailnumbers!=null && mailnumbers.size()>0){
+            CopyListutils.copyListBeanUtils(mailnumbers,mailNumVOS,MailNumVO.class);
+            if (!CollectionUtils.isEmpty(mailNumVOS)){
+                return mailNumVOS;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<MailNumTypeVO> findMailNumType() {
+        List<MailNumTypeVO> mailNumTypeVOS = mailNumberMapper.findMailNumType();
+        if (!CollectionUtils.isEmpty(mailNumTypeVOS)){
+            return mailNumTypeVOS;
+        }
+        return null;
+    }
+
+    @Override
+    public List<MailNumStatusVO> findMailNumStatus() {
+        List<MailNumStatusVO> mailNumStatusVOS = mailNumberMapper.findMailNumStatus();
+        if (!CollectionUtils.isEmpty(mailNumStatusVOS)){
+            return mailNumStatusVOS;
+        }
+        return null;
+    }
+
+    @Override
+    public List<MailBooksVO> findMailUsers(Long userId) {
+        List<MailBooksVO> mailBooksVOS = mailNumberMapper.findMailUsers(userId);
+        if (!CollectionUtils.isEmpty(mailBooksVOS)){
+            return mailBooksVOS;
+        }
+        return null;
     }
 }

@@ -25,7 +25,7 @@ public class Mailreciver {
      */
 
     @Column(name="mail_id")
-    private Inmaillist mailId;
+    private Long mailId;
 
 
     /**
@@ -37,15 +37,15 @@ public class Mailreciver {
      * //是否已读
      */
     @Column(name="is_read")
-    private Boolean read=false;
+    private Integer read;
     /**
      * //是否星标
      */
     @Column(name="is_star")
-    private Boolean star=false;
+    private Integer star;
     /**
      * //是否真正删除
      */
     @Column(name="is_del")
-    private Boolean del=false;
+    private Integer del;
 }

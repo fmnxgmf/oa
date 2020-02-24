@@ -3,7 +3,9 @@ package cn.fmnx.oa.service.mailService;
 import cn.fmnx.oa.common.page.PageDTO;
 import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.mail.dto.AddMailAcountDTO;
-import cn.fmnx.oa.contoller.mail.vo.MailAccountsVO;
+import cn.fmnx.oa.contoller.mail.vo.*;
+
+import java.util.List;
 
 public interface MailNumService {
     boolean addMailAccount(AddMailAcountDTO addMailAcountDTO);
@@ -15,4 +17,12 @@ public interface MailNumService {
     boolean updateMailAccount(AddMailAcountDTO mailAcountDTO);
 
     boolean deleteMailAccount(Long mailNumberId);
+
+    List<MailNumVO> findMailNum(Long userId);
+
+    List<MailNumTypeVO> findMailNumType();
+
+    List<MailNumStatusVO> findMailNumStatus();
+
+    List<MailBooksVO> findMailUsers(Long userId);
 }
