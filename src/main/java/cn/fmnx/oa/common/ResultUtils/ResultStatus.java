@@ -11,7 +11,7 @@ public enum  ResultStatus {
     /**
      * 成功
      */
-    SUCCESS(100, "成功"),
+    SUCCESS(200, "成功"),
 
     /**
      * 无法查询到用户信息

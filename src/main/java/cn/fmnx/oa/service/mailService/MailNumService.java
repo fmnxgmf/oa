@@ -6,6 +6,7 @@ import cn.fmnx.oa.contoller.mail.dto.AddMailAcountDTO;
 import cn.fmnx.oa.contoller.mail.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MailNumService {
     boolean addMailAccount(AddMailAcountDTO addMailAcountDTO);
@@ -25,4 +26,10 @@ public interface MailNumService {
     List<MailNumStatusVO> findMailNumStatus();
 
     List<MailBooksVO> findMailUsers(Long userId);
+
+    boolean deletemailInBox(List<Long> mailIds);
+
+    boolean setMailInBoxStar(List<Map<Integer, Integer>> mailIds);
+
+    boolean setMailInBoxRead(List<Map<Integer, Integer>> mailIds);
 }

@@ -58,6 +58,8 @@ public class Inmaillist {
      */
     @Column(name="in_receiver")
     private String inReceiver;
+    @Column(name = "in_receiver_name")
+    private String inReceiverName;
     /**
      * //邮件附件id
      */

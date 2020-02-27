@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
@@ -32,7 +33,7 @@ public class ResultModel<T> implements Serializable {
      * 返回数据量
      */
     @ApiModelProperty(name = "count",value = "返回的数据量",example = "200")
-    private Integer count;
+    private Integer count ;
 
 
     // 返回内容

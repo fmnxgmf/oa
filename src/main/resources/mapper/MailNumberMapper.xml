@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.fmnx.oa.mapper.mailMapper.MailNumberMapper">
+    <update id="deleteMailInBox">
+       update aoa_mail_reciver m set m.is_del = 1 where m.mail_id in
+       <foreach collection="mailIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+       </foreach>
+    </update>
 
+    <update id="setMailInBoxStar">
+        <foreach collection="mailIds"  item="map" index="index"  separator=";" >
+            <foreach collection="map" separator="," item="val" index="k" >
+                update aoa_mail_reciver as m
+                <set>
+                <choose>
+                    <when test="val ==1">
+                        m.is_star =0
+                    </when>
+                    <when test="val ==0">
+                        m.is_star =1
+                    </when>
+                </choose>
+                </set>
+                 where m.mail_id = #{k}
+            </foreach>
+        </foreach>
+    </update>
+    <update id="setMailInBoxRead">
+        <foreach collection="mailIds" item="map" index="index" separator=";">
+            <foreach collection="map" separator="," item="value" index="key">
+                update aoa_mail_reciver as m
+                <set>
+                    <choose>
+                        <when test="value == 0">
+                            m.is_read = 1
+                        </when>
+                        <when test="value == 1">
+                            m.is_read = 0
+                        </when>
+                    </choose>
+                </set>
+                where m.mail_id =#{key}
+            </foreach>
+        </foreach>
+    </update>
     <select id="findMailByUserId" resultType="cn.fmnx.oa.contoller.mail.vo.MailAccountsVO">
         select
             mail.mail_number_id,

@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName MailMapper
@@ -29,4 +30,10 @@ public interface MailNumberMapper extends Mapper<Mailnumber> {
     List<MailNumStatusVO> findMailNumStatus();
 
     List<MailBooksVO> findMailUsers(@Param("userId") Long userId);
+
+    Integer deleteMailInBox(@Param("mailIds") List<Long> mailIds);
+
+    Integer setMailInBoxStar(@Param("mailIds") List<Map<Integer, Integer>> mailIds);
+
+    Integer setMailInBoxRead(@Param("mailIds")List<Map<Integer, Integer>> mailIds);
 }

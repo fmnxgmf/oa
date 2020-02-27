@@ -13,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName MailNumServiceImpl
@@ -134,5 +136,35 @@ public class MailNumServiceImpl implements MailNumService {
             return mailBooksVOS;
         }
         return null;
+    }
+
+    @Override
+    public boolean deletemailInBox(List<Long> mailIds) {
+       Integer flag = mailNumberMapper.deleteMailInBox(mailIds);
+       if (flag == mailIds.size()){
+           return true;
+       }else {
+           //手动事务强制回滚
+           TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+           return false;
+       }
+    }
+
+    @Override
+    public boolean setMailInBoxStar(List<Map<Integer, Integer>> mailIds) {
+        Integer integer = mailNumberMapper.setMailInBoxStar(mailIds);
+        if (integer > 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setMailInBoxRead(List<Map<Integer, Integer>> mailIds) {
+        Integer i = mailNumberMapper.setMailInBoxRead(mailIds);
+        if (i > 0){
+            return true;
+        }
+        return false;
     }
 }

@@ -12,12 +12,10 @@ import cn.fmnx.oa.service.mailService.MailNumService;
 import cn.fmnx.oa.service.mailService.impl.InmaillistServiceImpl;
 import cn.fmnx.oa.service.mailService.impl.MailNumServiceImpl;
 import cn.fmnx.oa.service.mailService.impl.MailreciverServiceImpl;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,7 +106,7 @@ public class MailController {
             @ApiImplicitParam(name = "condition",value = "模糊查询的条件")
     })
     @GetMapping("/showMailByLike")
-    public ResultModel<PageResult<MailAccountsVO>> showAllMailAccountLike(@RequestParam("UserId") Long userId,
+    public ResultModel<PageResult<MailAccountsVO>> showAllMailAccountLike(@RequestParam("userId") Long userId,
                                                                             @RequestParam("condition") String condition,
                                                                             @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                                             @RequestParam(value = "pageSize",required = false)Integer pageSize){
@@ -309,15 +307,15 @@ public class MailController {
      * @Author: gmf
      * @Date: 2020/2/24
     **/
-    @ApiOperation(value = "展示收件箱的数据的接口")
+    @ApiOperation(value = "展示收件箱")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
             @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int"),
-            @ApiImplicitParam(name = "userId",value = "用户id")
+            @ApiImplicitParam(name = "userId",value = "用户id",required = true)
     })
     @GetMapping("/showMailInBox")
-    public ResultModel<PageResult<MailInBoxVO>> showInBox(@RequestParam("pageNum")Integer pageNum,
-                                                          @RequestParam("pageSize")Integer pageSize,
+    public ResultModel<PageResult<MailInBoxVO>> showInBox(@RequestParam(value = "pageNum",required = false)Integer pageNum,
+                                                          @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                                           @RequestParam("userId")Long userId){
         PageDTO pageDTO;
         if(pageNum !=null && pageSize !=null){
@@ -325,7 +323,302 @@ public class MailController {
         }else {
             pageDTO = new PageDTO(1,10);
         }
+
         PageResult<MailInBoxVO> pageResult = mailreciverService.showMailInBox(userId,pageDTO);
-        return ResultModel.ok();
+        if (!CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+
+    /**
+     * @MethodName: deleteIds
+     * @Description: 根据邮件id批量删除收件箱邮件
+     * @Param: [mailIds]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/25
+    **/
+    @ApiOperation(value = "根据邮件id批量删除收件箱邮件")
+    @DeleteMapping("/deleteMailInBox")
+    public ResultModel deleteIds(@RequestBody @ApiParam(value = "该参数是List集合类型，并非数组",required = true) List<Long> mailIds){
+        boolean flag = mailNumService.deletemailInBox(mailIds);
+        if (flag){
+            return ResultModel.ok("收件箱邮箱删除成功");
+        }else {
+            throw new OaException(ExceptionEnum.DELETE_DATA_LIST_ERROR);
+        }
+    }
+    /**
+     * @MethodName: setMailInBoxStar
+     * @Description: 邮件表星操作
+     * @Param: [mailIds, star]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/25
+    **/
+    @ApiOperation(value = "根据邮件id给收件箱邮件批量标星，同时需要转递star值来判断是标星还是取消标星")
+    @PutMapping("/setMailInBoxStar")
+    public ResultModel setMailInBoxStar(@RequestBody @ApiParam(value = "该参数是List<Map<mailId,star>>集合类型的键值对，键为该邮箱id，值是该星标star的值",
+            required = true) List<Map<Integer,Integer>> mailIds){
+        boolean flag = mailNumService.setMailInBoxStar(mailIds);
+        if (flag){
+            return ResultModel.ok("邮件标星成功");
+        }else {
+            throw new OaException(ExceptionEnum.MAIL_BEACON_STAR_FAIL);
+        }
+    }
+    /**
+     * @MethodName: setMailInBoxRead
+     * @Description: 收件箱标记邮件是否已读
+     * @Param: [mailIds]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/25
+    **/
+    @ApiOperation(value = "收件箱批量标记邮件是否已读")
+    @PutMapping("/setMailInBoxRead")
+    public ResultModel setMailInBoxRead(@RequestBody @ApiParam(value = "该参数是List<Map<mailId,star>>集合类型的键值对，键为该邮箱id，职位read的值",
+            required = true)List<Map<Integer,Integer>>mailIds){
+        boolean flag = mailNumService.setMailInBoxRead(mailIds);
+        if (flag){
+            return ResultModel.ok("标记邮件已读成功");
+        }else {
+            throw new OaException(ExceptionEnum.MAIL_BEACON_READY_FAIL);
+        }
+    }
+    /**
+     * @MethodName: findMailInBoxByLike
+     * @Description: 模糊查询
+     * @Param: [condition, pageNum, pageSize]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.common.page.PageResult<cn.fmnx.oa.contoller.mail.vo.MailInBoxVO>>
+     * @Author: gmf
+     * @Date: 2020/2/25
+    **/
+    @ApiOperation(value = "收件箱根据类型，状态，主题，发件人模糊查询")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition",value = "查询的条件",required = false),
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "userId",value = "用户id",required = true)
+    })
+    @GetMapping("/findMailInBoxLike")
+    public ResultModel<PageResult<MailInBoxVO>> findMailInBoxByLike(@RequestParam(value = "condition",required = false) String condition,
+                                                                    @RequestParam("userId")Long userId,
+                                                                    @RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                                    @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO ;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+        PageResult<MailInBoxVO> pageResult = mailreciverService.findMailInBoxByLike(condition,pageDTO,userId);
+        if (!CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: findOneMainInBoxById
+     * @Description: 查询收件箱某封邮件详情
+     * @Param: [mailId, userId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.mail.vo.OneMailInBoxInfoVO>
+     * @Author: gmf
+     * @Date: 2020/2/26
+    **/
+    @ApiOperation(value = "查询收件箱某封邮件详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mailId",value = "该邮件的id值",required = true),
+            @ApiImplicitParam(name = "userId",value = "该用户id值",required = true)
+    })
+    @GetMapping("/findOneMailInBox")
+    public ResultModel<OneMailInBoxInfoVO> findOneMainInBoxById(@RequestParam("mailId")Long mailId,@RequestParam("userId")Long userId){
+        OneMailInBoxInfoVO oneMailInBoxInfoVO = mailreciverService.findOneMailInBox(mailId,userId);
+        Map map = new HashMap(2);
+        if (!StringUtils.isEmpty(oneMailInBoxInfoVO)){
+            map.put("oneMailInBoxInfoVO",oneMailInBoxInfoVO);
+            return ResultModel.ok(map,1);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: replyMail
+     * @Description: 邮件回复的接口
+     * @Param: [mailId, userId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.mail.vo.ReplyMailInboxVO>
+     * @Author: gmf
+     * @Date: 2020/2/26
+    **/
+    @ApiOperation(value = "邮件回复的接口，收件人由后端返回，即原发件人就是现收件人")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mailId",value = "原邮件id",required = true),
+            @ApiImplicitParam(name = "userId",value = "自己用户id",required = true)
+    })
+    @GetMapping("/replyMail")
+    public ResultModel<ReplyMailInboxVO> replyMail(@RequestParam("mailId")Long mailId,@RequestParam("userId")Long userId){
+        ReplyMailInboxVO replyMailInboxVO = mailreciverService.replyMail(userId,mailId);
+        Map map = new HashMap(2);
+        if (!StringUtils.isEmpty(replyMailInboxVO)){
+            map.put("replyMailInboxVO",replyMailInboxVO);
+            return ResultModel.ok(map,1);
+        }else {
+            throw new OaException(ExceptionEnum.ECHO_DATA_FAIL);
+        }
+    }
+    /**
+     * @MethodName: showOutBox
+     * @Description: 发件箱
+     * @Param: [pageNum, pageSize, userId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/24
+     **/
+    @ApiOperation(value = "展示该用户的发件箱")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "userId",value = "用户id",required = true)
+    })
+    @GetMapping("/showOutBox")
+    public ResultModel<MailOutBoxVO> showOutBox(@RequestParam(value = "pageNum",required = false)Integer pageNum,
+                                                @RequestParam(value = "pageSize",required = false)Integer pageSize,
+                                                @RequestParam(value = "userId")Long userId){
+        PageDTO pageDTO;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+
+        PageResult<MailOutBoxVO>  pageResult = inmaillistService.showMailOutBox(userId,pageDTO);
+        if (!CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: deleteMailOutBox
+     * @Description: 根据id批量删除发件箱邮件
+     * @Param: [mailIds]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/26
+    **/
+    @ApiOperation(value = "根据id批量删除发件箱邮件")
+    @DeleteMapping("/deleteMailOutBox")
+    public ResultModel deleteMailOutBox(@RequestBody @ApiParam(value = "该参数是List集合类型，并非数组",required = true) List<Long> mailIds){
+        boolean flag = inmaillistService.deleteMailOutBox(mailIds);
+        if (flag){
+            return ResultModel.ok("发件箱邮件删除成功");
+        }else {
+            throw new OaException(ExceptionEnum.DELETE_DATA_LIST_ERROR);
+        }
+    }
+    /**
+     * @MethodName: setMailOutBoxStar
+     * @Description: 给发件箱的邮件批量标/取消标星
+     * @Param: [mailIds]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/26
+    **/
+    @ApiOperation(value = "给发件箱的邮件批量标/取消标星")
+    @PutMapping("/setMailOutBoxStar")
+    public ResultModel setMailOutBoxStar(@RequestBody @ApiParam(value = "该参数是List<Map<mailId,star>>集合类型的键值对，键为该邮箱id，值是该星标star的值",
+            required = true)List<Map<Integer,Integer>> mailIds){
+        boolean flag = inmaillistService.setMailOutBoxStar(mailIds);
+        if (flag){
+            return ResultModel.ok("批量标星成功");
+        }else {
+            throw new OaException(ExceptionEnum.MAIL_BEACON_STAR_FAIL);
+        }
+    }
+    /**
+     * @MethodName: showMailOutBoxByLike
+     * @Description: 发件箱模糊查询，类型，状态，主题，收件人
+     * @Param: [condition, userId, pageNum, pageSize]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.common.page.PageResult<cn.fmnx.oa.contoller.mail.vo.MailOutBoxVO>>
+     * @Author: gmf
+     * @Date: 2020/2/26
+    **/
+    @ApiOperation(value = "发件箱模糊查询，类型，状态，主题，收件人")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition",value = "查询的条件",required = false),
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "userId",value = "用户id",required = true)
+    })
+    @GetMapping("/findMailOutBoxLike")
+    public ResultModel<PageResult<MailOutBoxVO>> showMailOutBoxByLike(@RequestParam(value = "condition",required = false) String condition,
+                                                                      @RequestParam("userId")Long userId,
+                                                                      @RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                                      @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO;
+        if (pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+
+       PageResult<MailOutBoxVO> mailOutBoxVOPageResult = inmaillistService.findMailOutBoxByLike(condition,pageDTO,userId);
+        if (!CollectionUtils.isEmpty(mailOutBoxVOPageResult.getItems())){
+            return ResultModel.ok(mailOutBoxVOPageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: DraftsBox
+     * @Description: 草稿箱查询
+     * @Param: [pushMailDTO]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.mail.vo.DraftsBoxVO>
+     * @Author: gmf
+     * @Date: 2020/2/27
+    **/
+    @ApiOperation(value = "查看草稿箱相关的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false,dataType = "int"),
+    })
+    @GetMapping("/DraftsBox")
+    public ResultModel<PageResult<DraftsBoxVO>> DraftsBox(@RequestParam("userId")@ApiParam(value = "用户id",required = true) Long userId,
+                                                          @RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                          @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO ;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+
+        PageResult<DraftsBoxVO> pageResult = inmaillistService.findAllDraftsBoxVO(userId,pageDTO);
+        if (!CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: deleteDraftsBox
+     * @Description: 根据mailId批量删除草稿箱
+     * @Param: [mailIds]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/27
+    **/
+    @ApiOperation(value = "根据mailId批量删除草稿箱")
+    @DeleteMapping("/deleteDraftsBox")
+    public ResultModel deleteDraftsBox(@RequestBody List<Long> mailIds){
+        boolean flag = inmaillistService.deleteDraftsBox(mailIds);
+        if (flag){
+            return ResultModel.ok("草稿箱删除成功");
+        }else {
+            throw new OaException(ExceptionEnum.DELETE_DATA_LIST_ERROR);
+        }
     }
 }

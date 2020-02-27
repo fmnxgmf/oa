@@ -48,6 +48,8 @@ public class PushMailDTO implements Serializable {
      */
     @ApiModelProperty(name = "inReceiver",value = "接收人是（可以是多个）userId，以‘;’l来分个接收人",example = "1;2")
     private String inReceiver;
+    @ApiModelProperty(name = "inReceiverName",value = "接收人的名字可以是多个以';'分割,前端可以放弃该字段后端维护",example = "one;two;three",required = false)
+    private String inReceiverName;
     /**
      * //邮件附件id
      */

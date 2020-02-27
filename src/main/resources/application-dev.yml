@@ -9,7 +9,7 @@ spring:
     multipart:
       max-file-size: 20MB # 限制文件上传的大小
   datasource:
-    url: jdbc:mysql://localhost:3306/oasys
+    url: jdbc:mysql://localhost:3306/oasys?characterEncoding=utf-8&allowMultiQueries=true
     username: root
     password: gmf123
     driver-class-name: com.mysql.jdbc.Driver

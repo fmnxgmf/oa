@@ -10,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName Mail
@@ -56,5 +60,33 @@ public class Mail {
     @Test
     public void showMailInBox(){
         mailreciverMapper.showMailInBox(2L).forEach(System.out::println);
+    }
+    @Test
+    public void arrayDemo(){
+        String[] s = {"2","3"};
+        inmaillistMapper.findUserNameById(s).forEach(System.out::println);
+    }
+    @Test
+    public void deleteMailInBox(){
+        List<Long> list = new ArrayList<>();
+        list.add(2L);list.add(3L);list.add(4L);
+        Integer integer = mailNumberMapper.deleteMailInBox(list);
+        System.out.println("integer = " + integer);
+    }
+    @Test
+    public void setStar(){
+        Map map1 = new HashMap();
+        map1.put(2,1);
+        Map map3 = new HashMap();
+        map3.put(3,1);
+        Map map2 = new HashMap();
+        map2.put(4,1);
+        List list = new ArrayList();
+        list.add(map1);
+        list.add(map2);
+        list.add(map3);
+        Integer integer = mailNumberMapper.setMailInBoxStar(list);
+        System.out.println("integer = " + integer);
+
     }
 }
