@@ -1,21 +1,30 @@
 package cn.fmnx.oa.service.mailService.impl;
 
+import cn.fmnx.oa.contoller.mail.JavajmsUtils;
+import cn.fmnx.oa.common.mail.JmsDTO;
 import cn.fmnx.oa.common.page.PageDTO;
 import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.common.utils.CopyListutils;
 import cn.fmnx.oa.contoller.mail.dto.AddMailAcountDTO;
+import cn.fmnx.oa.contoller.mail.dto.PushExternalMailDTO;
 import cn.fmnx.oa.contoller.mail.vo.*;
+import cn.fmnx.oa.entity.attachment.Attachment;
+import cn.fmnx.oa.entity.mail.Inmaillist;
 import cn.fmnx.oa.entity.mail.Mailnumber;
+import cn.fmnx.oa.mapper.attachmentMapper.AttachmentMapper;
+import cn.fmnx.oa.mapper.mailMapper.InmaillistMapper;
 import cn.fmnx.oa.mapper.mailMapper.MailNumberMapper;
 import cn.fmnx.oa.service.mailService.MailNumService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -35,6 +44,12 @@ import java.util.Map;
 public class MailNumServiceImpl implements MailNumService {
     @Resource
     private MailNumberMapper mailNumberMapper;
+    @Resource
+    private InmaillistMapper inmaillistMapper;
+    @Resource
+    private AttachmentMapper attachmentMapper;
+    @Autowired
+    private JavajmsUtils jmsutils;
     @Override
     public boolean addMailAccount(AddMailAcountDTO addMailAcountDTO) {
         Mailnumber mailnumber = new Mailnumber();
@@ -166,5 +181,80 @@ public class MailNumServiceImpl implements MailNumService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<ExternalMailVO> findExternalMail(Long userId) {
+        Example example = new Example(Mailnumber.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (userId != null){
+            criteria.andEqualTo("mailUserId",userId);
+        }
+        List<Mailnumber> mailnumbers = mailNumberMapper.selectByExample(example);
+        List<ExternalMailVO> list = new ArrayList<>();
+        CopyListutils.copyListBeanUtils(mailnumbers,list,ExternalMailVO.class);
+        if (!CollectionUtils.isEmpty(list)){
+            return list;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean pushExternalMail(PushExternalMailDTO pushExternalMailDTO) {
+        //1.判断收件人属于那种邮箱所对应的smtp服务器
+        String[] split = pushExternalMailDTO.getInReceiverName().split(";");
+        for (String s : split) {
+            Example example = new Example(Mailnumber.class);
+            Example.Criteria criteria = example.createCriteria();
+            Example.Criteria mailNumberId = criteria.andEqualTo("mailNumberId", pushExternalMailDTO.getMailNumberid());
+            Mailnumber mailnumber = mailNumberMapper.selectOneByExample(example);
+            String ext = org.apache.commons.lang3.StringUtils.substringAfterLast(mailnumber.getMailAccount(), "@");
+            JmsDTO jmsDTO = new JmsDTO();
+            //设置授权码
+            jmsDTO.setPassword(mailnumber.getPassword());
+            //设置发送者账户
+            jmsDTO.setUsername(mailnumber.getMailAccount());
+            //设置接收者
+            jmsDTO.setTo(s);
+            //设置主题
+            jmsDTO.setSubject(pushExternalMailDTO.getMailTitle());
+            //设置邮件内容
+            jmsDTO.setText(pushExternalMailDTO.getContent());
+            //设置附件
+            Example attach = new Example(Attachment.class);
+            attach.createCriteria().andEqualTo("attachmentId",pushExternalMailDTO.getMailFileid());
+            Attachment attachment = attachmentMapper.selectOneByExample(attach);
+            jmsDTO.setFilePath(attachment.getAttachmentPath());
+            jmsDTO.setAttachmentName(attachment.getAttachmentName());
+            if (ext.equalsIgnoreCase("qq.com")){
+                jmsDTO.setHost("smtp.qq.com");
+                boolean flag = jmsutils.pushExternalMail(jmsDTO);
+                if (!flag){
+                    return false;
+                }
+            } else if (ext.equalsIgnoreCase("163.com")){
+                jmsDTO.setHost("smtp.163.com");
+                boolean flag = jmsutils.pushExternalMail(jmsDTO);
+                if (!flag){
+                    return false;
+                }
+            }
+        }
+        //都执行成功后再将信息存入aoa_in_mail_list即可，因为外部邮件收件箱不用存在
+        pushExternalMailDTO.setMailCreateTime(new Date());
+        //未删除
+        pushExternalMailDTO.setDel(0);
+        //为表星
+        pushExternalMailDTO.setStar(0);
+        //发送成功
+        pushExternalMailDTO.setPush(0);
+        Inmaillist inmaillist = new Inmaillist();
+        BeanUtils.copyProperties(pushExternalMailDTO,inmaillist);
+        if (!StringUtils.isEmpty(inmaillist)){
+            inmaillistMapper.insert(inmaillist);
+        }
+
+        return true;
     }
 }

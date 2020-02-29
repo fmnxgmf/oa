@@ -6,6 +6,7 @@ import cn.fmnx.oa.common.fastdfs.UploadProperties;
 import cn.fmnx.oa.entity.attachment.Attachment;
 import cn.fmnx.oa.service.upload.UploadService;
 import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,12 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -139,5 +141,31 @@ public class UploadServiceImpl implements UploadService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public File downFile(String groupName, String fileName) {
+        String group = groupName.substring(groupName.indexOf("group1"),groupName.indexOf("/M00"));
+        String path = groupName.substring(groupName.indexOf("M00/"));
+        OutputStream out = null;
+        try {
+            String jar_parent = new File(ResourceUtils.getURL("classpath:").getPath())
+                    .getParentFile()
+                    .getParentFile()
+                    .getParent();
+           out = new FileOutputStream(jar_parent+File.separator+fileName);
+            byte[] bytes = storageClient.downloadFile(group, path, new DownloadByteArray());
+            out.write(bytes);
+            return new File(jar_parent+File.separator+fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

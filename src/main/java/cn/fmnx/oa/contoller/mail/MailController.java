@@ -6,6 +6,7 @@ import cn.fmnx.oa.common.exception.OaException;
 import cn.fmnx.oa.common.page.PageDTO;
 import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.mail.dto.AddMailAcountDTO;
+import cn.fmnx.oa.contoller.mail.dto.PushExternalMailDTO;
 import cn.fmnx.oa.contoller.mail.dto.PushMailDTO;
 import cn.fmnx.oa.contoller.mail.vo.*;
 import cn.fmnx.oa.service.mailService.MailNumService;
@@ -47,7 +48,7 @@ public class MailController {
      * @Author: gmf
      * @Date: 2020/2/22
     **/
-    @ApiOperation(value = "新增外部邮箱的接口")
+    @ApiOperation(value = "新增外部邮箱的接口,(注:外部邮箱暂只支持qq,163邮箱)")
     @PostMapping("/addMailAccount")
     public ResultModel addMailNum(@RequestBody @Validated AddMailAcountDTO addMailAcountDTO){
        boolean flag = mailNumService.addMailAccount(addMailAcountDTO);
@@ -619,6 +620,104 @@ public class MailController {
             return ResultModel.ok("草稿箱删除成功");
         }else {
             throw new OaException(ExceptionEnum.DELETE_DATA_LIST_ERROR);
+        }
+    }
+    /**
+     * @MethodName: showOneDraftsBox
+     * @Description: 查询某个草稿箱的详情
+     * @Param: [mailId, userId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/28
+    **/
+    @ApiOperation(value = "根据mailId查看草稿箱的详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mailId",value = "草稿箱的id值",required = true),
+            @ApiImplicitParam(name = "userId",value = "用户的id值",required = true)
+    })
+    @GetMapping("/showOneDraftsBox")
+    public ResultModel<DraftsBoxVO> showOneDraftsBox(@RequestParam("mailId")Long mailId,@RequestParam("userId")Long userId){
+      DraftsBoxVO draftsBoxVO = inmaillistService.findOneDraftsBox(mailId,userId);
+      Map map = new HashMap(2);
+      if (!StringUtils.isEmpty(draftsBoxVO)){
+          map.put("draftsBoxVO",draftsBoxVO);
+          return ResultModel.ok(map,1);
+      }else {
+          throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+      }
+    }
+    /**
+     * @MethodName: findDraftsBoxByLike
+     * @Description: 模糊查询草稿箱
+     * @Param: [condition, userId, pageNum, pageSize]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.common.page.PageResult<cn.fmnx.oa.contoller.mail.vo.DraftsBoxVO>>
+     * @Author: gmf
+     * @Date: 2020/2/28
+    **/
+
+    @ApiOperation(value = "模糊查询草稿箱")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition",value = "查询的条件",required = false),
+            @ApiImplicitParam(name = "pageNum",value = "分页页码",required = false),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小",required = false),
+            @ApiImplicitParam(name = "userId",value = "用户id",required = true)
+    })
+    @GetMapping("/showDraftsBoxByLike")
+    public ResultModel<PageResult<DraftsBoxVO>> findDraftsBoxByLike(@RequestParam(value = "condition",required = false)String condition,
+                                                                    @RequestParam("userId")Long userId,
+                                                                    @RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                                    @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO ;
+        if(pageNum !=null && pageSize !=null){
+            pageDTO = new PageDTO(pageNum,pageSize);
+        }else {
+            pageDTO = new PageDTO(1,10);
+        }
+
+        PageResult<DraftsBoxVO> pageResult = inmaillistService.findOneDraftsBoxByLike(pageDTO,condition,userId);
+        if (!CollectionUtils.isEmpty(pageResult.getItems())){
+            return ResultModel.ok(pageResult);
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: showExternalMail
+     * @Description: 查询某个用户的外部邮箱账户
+     * @Param: [userId]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel<cn.fmnx.oa.contoller.mail.vo.ExternalMailVO>
+     * @Author: gmf
+     * @Date: 2020/2/29
+    **/
+    @ApiOperation(value = "查询某个用户的外部邮箱账户")
+    @ApiImplicitParam(name = "userId",value = "用户id",required = true)
+    @GetMapping("/showExternalMail")
+    public ResultModel<ExternalMailVO> showExternalMail(@RequestParam("userId")Long userId){
+        List<ExternalMailVO> list = mailNumService.findExternalMail(userId);
+        Map map = new HashMap();
+        if (!CollectionUtils.isEmpty(list)){
+            map.put("externalMail",list);
+            return ResultModel.ok(map,list.size());
+        }else {
+            throw new OaException(ExceptionEnum.FIND_DATA_ISEMPTY);
+        }
+    }
+    /**
+     * @MethodName: pushExternalMail
+     * @Description: 外部邮件的发送
+     * @Param: [pushMailDTO]
+     * @Return: cn.fmnx.oa.common.ResultUtils.ResultModel
+     * @Author: gmf
+     * @Date: 2020/2/29
+    **/
+    @ApiOperation(value = "发送外部邮箱的接口")
+    @PostMapping("/pushExternalMail")
+    public ResultModel pushExternalMail(@RequestBody PushExternalMailDTO pushExternalMailDTO){
+        boolean flag = mailNumService.pushExternalMail(pushExternalMailDTO);
+        if (flag){
+            return ResultModel.ok("外部邮件发送成功");
+        }else {
+            throw new OaException(ExceptionEnum.PUSH_EXTERNAL_MAIL_FAIL);
         }
     }
 }

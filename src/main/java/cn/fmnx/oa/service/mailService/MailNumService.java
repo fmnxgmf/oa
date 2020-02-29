@@ -3,6 +3,7 @@ package cn.fmnx.oa.service.mailService;
 import cn.fmnx.oa.common.page.PageDTO;
 import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.mail.dto.AddMailAcountDTO;
+import cn.fmnx.oa.contoller.mail.dto.PushExternalMailDTO;
 import cn.fmnx.oa.contoller.mail.vo.*;
 
 import java.util.List;
@@ -32,4 +33,8 @@ public interface MailNumService {
     boolean setMailInBoxStar(List<Map<Integer, Integer>> mailIds);
 
     boolean setMailInBoxRead(List<Map<Integer, Integer>> mailIds);
+
+    List<ExternalMailVO> findExternalMail(Long userId);
+
+    boolean pushExternalMail(PushExternalMailDTO pushExternalMailDTO);
 }

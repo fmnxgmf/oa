@@ -29,4 +29,8 @@ public interface InmaillistService {
     PageResult<DraftsBoxVO> findAllDraftsBoxVO(Long userId, PageDTO pageDTO);
 
     boolean deleteDraftsBox(List<Long> mailIds);
+
+    DraftsBoxVO findOneDraftsBox(Long mailId, Long userId);
+
+    PageResult<DraftsBoxVO> findOneDraftsBoxByLike(PageDTO pageDTO, String condition, Long userId);
 }

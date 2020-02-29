@@ -8,16 +8,16 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @ClassName PushMail
+ * @ClassName PushExternalMailDTO
  * @Description: TODO
  * @Author gmf
- * @Date 2020/2/23
+ * @Date 2020/2/29
  * @Version V1.0
  **/
 @Data
-@ApiModel(description = "发送邮件所需要的数据对象")
-public class PushMailDTO implements Serializable {
-
+@ApiModel(description = "发送外部邮箱所需的数据对象")
+public class PushExternalMailDTO implements Serializable {
+    private static final long serialVersionUID = 1690391428664056256L;
     /**
      * //邮件类型（通知，公告，邮件）
      */
@@ -46,9 +46,7 @@ public class PushMailDTO implements Serializable {
     /**
      * //接收人（可以是多个）
      */
-    @ApiModelProperty(name = "inReceiver",value = "接收人是（可以是多个）userId，以‘;’l来分个接收人",example = "1;2")
-    private String inReceiver;
-    @ApiModelProperty(name = "inReceiverName",value = "接收人的名字可以是多个以';'分割,前端可以放弃该字段后端维护",example = "one;two;three",required = false)
+    @ApiModelProperty(name = "inReceiverName",value = "接收人的名字可以是多个以';'分割,",example = "one@qq.com;two.@qq.com",required = true)
     private String inReceiverName;
     /**
      * //邮件附件id
@@ -60,6 +58,11 @@ public class PushMailDTO implements Serializable {
      */
     @ApiModelProperty(name = "mailCreateTime",value = "邮件创建时间,前端不用提交，后端自己维护",required = false)
     private Date mailCreateTime;
+    /**
+     * //外部邮件账号id
+     */
+    @ApiModelProperty(name = "mailNumberid",value = "外部邮件账号id,内部邮件发送可以不用，外部邮件发送需要")
+    private Long mailNumberid;
     /**
      * 邮件是否删除
      */

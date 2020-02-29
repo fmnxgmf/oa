@@ -14,6 +14,7 @@ import lombok.*;
 @Getter
 public enum ExceptionEnum {
     FIND_DATA_ISEMPTY(200,"[查询数据为空]"),
+    PUSH_EXTERNAL_MAIL_FAIL(500,"[外部邮件发送失败]"),
     MAIL_BEACON_STAR_FAIL(500,"[邮件标星无效]"),
     MAIL_BEACON_READY_FAIL(500,"[邮件标记为已读无效]"),
     ADD_MAIL_ACCOUNT_FAIL(500,"[新增邮箱账户无效]"),

@@ -3,6 +3,7 @@ package cn.fmnx.oa.common.fastdfs;
 import cn.fmnx.oa.OaApplication;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.domain.ThumbImageConfig;
+import com.github.tobato.fastdfs.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +12,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 /**
  * @ClassName FdFsClientDemo
@@ -57,4 +57,43 @@ public class FdFsClientDemo {
         String thumbImagePath = thumbImageConfig.getThumbImagePath(storePath.getPath());
         System.out.println(thumbImagePath);
     }
+    @Test
+    public void down() throws Exception {
+        String url = "group1/M00/00/00/rBLB7V5SRsyAUI20AABWAMMzhrU113.xls";
+        String fileName = "1117124170.xls";
+        String group = url.substring(0, url.indexOf("/"));
+        System.out.println("group = " + group);
+        String path = url.substring(url.indexOf("/") + 1);
+        System.out.println("path = " + path);
+        byte[] bytes = storageClient.downloadFile(group, path, new DownloadByteArray());
+        File file = new File("E:\\down\\"+fileName);
+        String s = file.toString();
+        System.out.println("s = " + s);
+        //file.delete();
+        FileOutputStream out = new FileOutputStream(file);
+        out.write(bytes);
+        out.close();
+    }
+    @Test
+    public void down1() throws Exception {
+        String url = "http://120.79.23.95/group1/M00/00/00/rBLB7V5SRsyAUI20AABWAMMzhrU113.xls";
+        String fileName = "1117124170.xls";
+        System.out.println(url.indexOf("group1"));
+        String group = url.substring(url.indexOf("group1"),url.indexOf("/M00"));
+        System.out.println("group = " + group);
+        String path = url.substring(url.indexOf("M00/"));
+        System.out.println("path = " + path);
+        String jar_parent = new File(ResourceUtils.getURL("classpath:").getPath())
+                .getParentFile()
+                .getParentFile()
+                .getParent();
+        byte[] bytes = storageClient.downloadFile(group, path, new DownloadByteArray());
+        System.out.println("jar_parent+fileName = " + jar_parent+File.separator+fileName);
+        OutputStream out = new FileOutputStream(jar_parent+File.separator+fileName);
+        out.write(bytes);
+        out.close();
+
+
+    }
 }
+

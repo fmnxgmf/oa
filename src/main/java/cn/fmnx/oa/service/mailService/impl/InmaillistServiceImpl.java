@@ -189,4 +189,18 @@ public class InmaillistServiceImpl implements InmaillistService {
         }
         return false;
     }
+
+    @Override
+    public DraftsBoxVO findOneDraftsBox(Long mailId, Long userId) {
+        return inmaillistMapper.findOneDraftsBox(mailId,userId);
+
+    }
+
+    @Override
+    public PageResult<DraftsBoxVO> findOneDraftsBoxByLike(PageDTO pageDTO, String condition, Long userId) {
+        PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
+        List<DraftsBoxVO> list = inmaillistMapper.findOneDraftsBoxByLike(condition,userId);
+        PageResult<DraftsBoxVO> pageResult = new PageResult<>(new PageInfo<DraftsBoxVO>(list));
+        return pageResult;
+    }
 }

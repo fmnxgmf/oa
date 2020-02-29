@@ -135,6 +135,60 @@
             and m.mail_push = 1
             and m.mail_del = 0
         </where>
-
+        order by if(isnull(m.mail_create_time),0,1) ,m.mail_create_time desc
+    </select>
+    <select id="findOneDraftsBox" resultType="cn.fmnx.oa.contoller.mail.vo.DraftsBoxVO">
+        select
+        date_format(m.mail_create_time,'%Y-%m-%d %H:%i:%S') as mailCreateTime,
+        m.mail_content as content,
+        m.mail_title,
+        m.mail_type,
+        m.in_receiver as inReceiverId,
+        m.mail_id,
+        m.in_receiver_name,
+        m.mail_status_id as mailStatusid,
+        a.attachment_id as mailFileid,
+        a.attachment_path as path
+        from aoa_in_mail_list as m
+        left join aoa_attachment_list as a on a.attachment_id = m.mail_file_id
+        <where>
+            <if test="userId!=null">
+                and m.mail_in_push_user_id = #{userId}
+            </if>
+            <if test="mailId !=null">
+                and m.mail_id = #{mailId}
+            </if>
+            and m.mail_push = 1
+            and m.mail_del = 0
+        </where>
+        order by if(isnull(m.mail_create_time),0,1) ,m.mail_create_time desc
+    </select>
+    <select id="findOneDraftsBoxByLike" resultType="cn.fmnx.oa.contoller.mail.vo.DraftsBoxVO">
+        select
+        date_format(m.mail_create_time,'%Y-%m-%d %H:%i:%S') as mailCreateTime,
+        m.mail_content as content,
+        m.mail_title,
+        m.mail_type,
+        m.in_receiver as inReceiverId,
+        m.mail_id,
+        m.in_receiver_name,
+        m.mail_status_id as mailStatusid,
+        a.attachment_id as mailFileid,
+        a.attachment_path as path
+        from aoa_in_mail_list as m
+        join aoa_status_list as s on s.status_id = m.mail_status_id
+        join aoa_type_list as t on t.type_id = m.mail_type
+        left join aoa_attachment_list as a on a.attachment_id = m.mail_file_id
+        <where>
+            <if test="userId!=null">
+                and m.mail_in_push_user_id = #{userId}
+            </if>
+            <if test="condition !=null">
+                and concat(ifnull(m.mail_title,''),ifnull(m.in_receiver_name,''),ifnull(s.status_name,''),ifnull(t.type_name,'')) like '%${condition}%'
+            </if>
+            and m.mail_push = 1
+            and m.mail_del = 0
+        </where>
+        order by if(isnull(m.mail_create_time),0,1) ,m.mail_create_time desc
     </select>
 </mapper>

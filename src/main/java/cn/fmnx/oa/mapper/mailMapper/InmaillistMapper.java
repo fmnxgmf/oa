@@ -29,4 +29,8 @@ public interface InmaillistMapper extends Mapper<Inmaillist> {
     List<DraftsBoxVO> findAllDraftsBox(@Param("userId") Long userId);
 
     Integer deleteDraftsBox(@Param("mailIds") List<Long> mailIds);
+
+    DraftsBoxVO findOneDraftsBox(@Param("mailId") Long mailId, @Param("userId") Long userId);
+
+    List<DraftsBoxVO> findOneDraftsBoxByLike(@Param("condition") String condition, @Param("userId") Long userId);
 }

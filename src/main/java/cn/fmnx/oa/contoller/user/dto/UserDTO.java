@@ -50,7 +50,7 @@ public class UserDTO implements Serializable {
     /**
      *  //邮件
      */
-    @ApiModelProperty(name = "eamil",value = "邮箱",required = true)
+    @ApiModelProperty(name = "eamil",value = "邮箱,这里给用户添加的是该公司的内部邮箱并非外部邮箱(真实邮箱)",required = true,example = "89469@oa.com")
     @Email
     @NotBlank(message = "邮箱不能为空")
     @Pattern(regexp = "^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$", message = "请填写正确邮箱号")
