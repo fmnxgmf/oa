@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fmnx.oa.mapper.attendsMapper.AttendsMapper">
+
+    <select id="findSignInCount" resultType="java.lang.Integer">
+        select count(*)
+        from aoa_attends_list as a
+        <where>
+            <if test="attendsUserId !=null">
+                and a.attends_user_id = #{attendsUserId}
+            </if>
+            <if test="ymdDate!=null and ymdDate != ''">
+                and date_format(a.attends_time,'%Y-%m-%d') = #{ymdDate}
+            </if>
+        </where>
+    </select>
+</mapper>

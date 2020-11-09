@@ -77,12 +77,7 @@ public class MailController {
     public ResultModel<PageResult<MailAccountsVO>> showAllMailAccountByUser(@RequestParam("userId") Long userId,
                                                                             @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                                             @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
        PageResult<MailAccountsVO> pageResult = mailNumService.findAllMailByUserId(userId,pageDTO);
        if (!CollectionUtils.isEmpty(pageResult.getItems())){
@@ -111,12 +106,7 @@ public class MailController {
                                                                             @RequestParam("condition") String condition,
                                                                             @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                                             @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<MailAccountsVO> pageResult = mailNumService.findAllMailByLike(userId,pageDTO,condition);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
             return ResultModel.ok(pageResult);
@@ -318,12 +308,7 @@ public class MailController {
     public ResultModel<PageResult<MailInBoxVO>> showInBox(@RequestParam(value = "pageNum",required = false)Integer pageNum,
                                                           @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                                           @RequestParam("userId")Long userId){
-        PageDTO pageDTO;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
         PageResult<MailInBoxVO> pageResult = mailreciverService.showMailInBox(userId,pageDTO);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
@@ -409,12 +394,7 @@ public class MailController {
                                                                     @RequestParam("userId")Long userId,
                                                                     @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                                     @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<MailInBoxVO> pageResult = mailreciverService.findMailInBoxByLike(condition,pageDTO,userId);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
             return ResultModel.ok(pageResult);
@@ -488,12 +468,7 @@ public class MailController {
     public ResultModel<MailOutBoxVO> showOutBox(@RequestParam(value = "pageNum",required = false)Integer pageNum,
                                                 @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                                 @RequestParam(value = "userId")Long userId){
-        PageDTO pageDTO;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
         PageResult<MailOutBoxVO>  pageResult = inmaillistService.showMailOutBox(userId,pageDTO);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
@@ -559,12 +534,7 @@ public class MailController {
                                                                       @RequestParam("userId")Long userId,
                                                                       @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                                       @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO;
-        if (pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
        PageResult<MailOutBoxVO> mailOutBoxVOPageResult = inmaillistService.findMailOutBoxByLike(condition,pageDTO,userId);
         if (!CollectionUtils.isEmpty(mailOutBoxVOPageResult.getItems())){
@@ -590,12 +560,7 @@ public class MailController {
     public ResultModel<PageResult<DraftsBoxVO>> DraftsBox(@RequestParam("userId")@ApiParam(value = "用户id",required = true) Long userId,
                                                           @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                           @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
         PageResult<DraftsBoxVO> pageResult = inmaillistService.findAllDraftsBoxVO(userId,pageDTO);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
@@ -667,12 +632,7 @@ public class MailController {
                                                                     @RequestParam("userId")Long userId,
                                                                     @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                                     @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
         PageResult<DraftsBoxVO> pageResult = inmaillistService.findOneDraftsBoxByLike(pageDTO,condition,userId);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){

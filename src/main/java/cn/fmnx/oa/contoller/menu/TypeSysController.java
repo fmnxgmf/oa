@@ -3,6 +3,8 @@ package cn.fmnx.oa.contoller.menu;
 import cn.fmnx.oa.common.ResultUtils.ResultModel;
 import cn.fmnx.oa.common.enums.ExceptionEnum;
 import cn.fmnx.oa.common.exception.OaException;
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.menu.dto.AddTypeListDTO;
 import cn.fmnx.oa.contoller.menu.vo.TypeListVO;
 import cn.fmnx.oa.entity.menu.SystemTypeList;
@@ -41,13 +43,16 @@ public class TypeSysController {
      * @Date: 2020/2/10
     **/
     @ApiOperation(value = "进入类型管理界面展示所有内容的接口",httpMethod = "GET")
-    @ApiImplicitParam(name = "token",value = "token",required = true,dataType = "String",paramType = "header")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "页码，默认值1",required = false,dataType = "int"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小，默认值10",required = false,dataType = "int")
+    })
     @GetMapping("/sysType")
-    public ResultModel<TypeListVO> getAllTypeList(){
-        Map map = new HashMap(2);
-       List<TypeListVO> list =typeSysService.findAllTypeList();
-       map.put("typeListVO",list);
-        return ResultModel.ok(map,list.size());
+    public ResultModel<PageResult<TypeListVO>> getAllTypeList(@RequestParam(value = "pageNum",required = false) Integer pageNum,
+                                                  @RequestParam(value = "pageSize",required = false)Integer pageSize){
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
+       PageResult<TypeListVO> list =typeSysService.findAllTypeList(pageDTO);
+        return ResultModel.ok(list);
     }
     /**
      * @MethodName: addTypeList

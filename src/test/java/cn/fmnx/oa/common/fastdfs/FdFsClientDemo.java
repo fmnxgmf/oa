@@ -95,5 +95,28 @@ public class FdFsClientDemo {
 
 
     }
+    @Test
+    public void path() throws Exception {
+//        String url = "http://120.79.23.95/group1/M00/00/00/rBLB7V5SRsyAUI20AABWAMMzhrU113.xls";
+//        String fileName = "1117124170.xls";
+//        System.out.println(url.indexOf("group1"));
+//        String group = url.substring(url.indexOf("group1"),url.indexOf("/M00"));
+//        System.out.println("group = " + group);
+//        String path = url.substring(url.indexOf("M00/"));
+//        System.out.println("path = " + path);
+//        File file = new File("down"+File.separator+fileName);
+//        if (!file.exists()) {
+//            file.mkdirs();
+//        }
+//        byte[] bytes = storageClient.downloadFile(group, path, new DownloadByteArray());
+//
+//        OutputStream out = new FileOutputStream(file);
+//        out.write(bytes);
+//        out.close();
+       File file = new File(ResourceUtils.getURL("").getPath());
+
+
+    }
+
 }
 

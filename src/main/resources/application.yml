@@ -1,3 +1,19 @@
 spring:
   profiles:
     active: dev
+  mail:
+    default-encoding: UTF-8
+    port: 465
+    auth: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 25000
+          ssl.enable: true
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          starttls.enable: true
+          socketFactory.port: 465　
+          port: 465
+
+

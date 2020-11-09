@@ -38,7 +38,16 @@ public class PageDTO {
     }
 
     public PageDTO(@Min(1) Integer pageNum, Integer pageSize) {
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
+        if(pageNum !=null){
+            this.pageNum = pageNum;
+        }else {
+            this.pageNum = 1;
+        }
+        if(pageSize != null){
+            this.pageSize = pageSize;
+        }else {
+            this.pageSize =10;
+        }
+
     }
 }

@@ -52,12 +52,7 @@ public class DeptController {
      @GetMapping("/findAllDept")
     public ResultModel<PageResult<DeptVO>> findAllDept(@RequestParam(value = "pageNum",required = false) Integer pageNum,
                                            @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<DeptVO> pageResult = deptService.findAllDept(pageDTO);
 
        if (!CollectionUtils.isEmpty(pageResult.getItems())){
@@ -181,12 +176,7 @@ public class DeptController {
     public ResultModel<PageResult<DeptUserVO>> findUserByDeptId(@RequestParam("deptId") Long deptId,
                                                     @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                     @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<DeptUserVO> pageResult = deptService.findUserByDeptId(deptId,pageDTO);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
             return ResultModel.ok(pageResult);

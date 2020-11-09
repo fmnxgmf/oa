@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -149,14 +150,16 @@ public class UploadServiceImpl implements UploadService {
         String path = groupName.substring(groupName.indexOf("M00/"));
         OutputStream out = null;
         try {
-            String jar_parent = new File(ResourceUtils.getURL("classpath:").getPath())
-                    .getParentFile()
-                    .getParentFile()
-                    .getParent();
-           out = new FileOutputStream(jar_parent+File.separator+fileName);
+            File file = new File(ResourceUtils.getURL("").getPath());
+            String pathFile = file+File.separator+fileName;
+            file = new File(pathFile);
+            if (!file.exists()){
+                file.createNewFile();
+            }
+            out = new FileOutputStream(pathFile);
             byte[] bytes = storageClient.downloadFile(group, path, new DownloadByteArray());
             out.write(bytes);
-            return new File(jar_parent+File.separator+fileName);
+            return new File(pathFile);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

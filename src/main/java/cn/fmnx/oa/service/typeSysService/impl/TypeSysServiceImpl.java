@@ -1,9 +1,13 @@
 package cn.fmnx.oa.service.typeSysService.impl;
 
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.menu.vo.TypeListVO;
 import cn.fmnx.oa.entity.menu.SystemTypeList;
 import cn.fmnx.oa.mapper.typeSysMapper.TypeSysMapper;
 import cn.fmnx.oa.service.typeSysService.TypeSysService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +28,11 @@ public class TypeSysServiceImpl implements TypeSysService {
     @Resource
     private TypeSysMapper typeSysMapper;
     @Override
-    public List<TypeListVO> findAllTypeList() {
+    public PageResult<TypeListVO> findAllTypeList(PageDTO pageDTO) {
+        PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
         List<TypeListVO> allTypeList = typeSysMapper.findAllTypeList();
-        return allTypeList;
+        PageResult<TypeListVO> pageResult = new PageResult<>(new PageInfo<TypeListVO>(allTypeList));
+        return pageResult;
     }
 
     @Override

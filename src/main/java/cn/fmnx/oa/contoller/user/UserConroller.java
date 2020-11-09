@@ -57,7 +57,7 @@ public class UserConroller {
     @Value("${oa.jwt.cookieName}")
     private String cookieName;
 
-    @ApiOperation(value = "用户登录接口,不必提交token值，成功返回OA_TOKEN的值", httpMethod = "POST")
+    @ApiOperation(value = "用户登录接口,不必提交token值，成功返回OA_TOKEN的值,和userId值", httpMethod = "POST")
     @ApiResponses({
             //@ApiResponse(code = 200,message = "登录成功",responseHeaders = {@ResponseHeader(name = "setCookie",response = Cookie.class)}),
             @ApiResponse(code = 200, message = "登录成功"),
@@ -72,6 +72,7 @@ public class UserConroller {
         String key = loginDto.getDeviceId() + ":" + "code";
         String code = (String) redisUtil.get(key);
         String token = null;
+        String userId ="";
         //System.out.println(code);
         //验证码验证成功
         if (loginDto.getCode().equalsIgnoreCase(code)) {
@@ -89,6 +90,7 @@ public class UserConroller {
                     // request: cookie中有域的概念 domain 例如一个cookie只能在www.baidu.com生效，无法在别的域下生效
                     // 给cookie绑定一个域，防止别的网站访问你的cookie，也是一种安全措施
                     CookieUtils.newBuilder(response).httpOnly().request(request).build(cookieName, token);
+                    userId =  user.getUserId().toString();
                 } catch (Exception e) {
                     throw new OaException(ExceptionEnum.NO_AUTHORIZED_PRO);
                 }
@@ -102,7 +104,7 @@ public class UserConroller {
         }
         Map map = new HashMap();
         map.put(cookieName, token);
-
+        map.put("userId",userId);
         return ResultModel.ok(map);
     }
     /**
@@ -157,12 +159,7 @@ public class UserConroller {
     @GetMapping("/findAllUser")
     public ResultModel<PageResult<UserVO>> findAllUser(@RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                        @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-             pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-             pageDTO = new PageDTO();
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
 
        PageResult<UserVO> pageResult= userService.findAllUser(pageDTO);
        if(!CollectionUtils.isEmpty(pageResult.getItems())){
@@ -227,12 +224,7 @@ public class UserConroller {
     public ResultModel<PageResult<UserVO>> findLikeAllInfo(@RequestParam("condition") String condition,
                                                @RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<UserVO> pageResult =userService.findLikeUser(condition,pageDTO);
         if (!CollectionUtils.isEmpty(pageResult.getItems())){
             return ResultModel.ok(pageResult);

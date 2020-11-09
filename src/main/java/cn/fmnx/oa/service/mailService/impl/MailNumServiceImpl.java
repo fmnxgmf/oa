@@ -222,11 +222,13 @@ public class MailNumServiceImpl implements MailNumService {
             //设置邮件内容
             jmsDTO.setText(pushExternalMailDTO.getContent());
             //设置附件
-            Example attach = new Example(Attachment.class);
-            attach.createCriteria().andEqualTo("attachmentId",pushExternalMailDTO.getMailFileid());
-            Attachment attachment = attachmentMapper.selectOneByExample(attach);
-            jmsDTO.setFilePath(attachment.getAttachmentPath());
-            jmsDTO.setAttachmentName(attachment.getAttachmentName());
+            if(pushExternalMailDTO.getMailFileid()!=null){
+                Example attach = new Example(Attachment.class);
+                attach.createCriteria().andEqualTo("attachmentId",pushExternalMailDTO.getMailFileid());
+                Attachment attachment = attachmentMapper.selectOneByExample(attach);
+                jmsDTO.setFilePath(attachment.getAttachmentPath());
+                jmsDTO.setAttachmentName(attachment.getAttachmentName());
+            }
             if (ext.equalsIgnoreCase("qq.com")){
                 jmsDTO.setHost("smtp.qq.com");
                 boolean flag = jmsutils.pushExternalMail(jmsDTO);

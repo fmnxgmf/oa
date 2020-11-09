@@ -29,12 +29,8 @@ fdfs:
 
 #showSql
 logging:
-  level:
-    cn:
-      fmnx:
-        oa:
-          mapper: debug
- #开启驼峰映射的配置信息
+  config: classpath:logback-spring.xml
+#开启驼峰映射的配置信息
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

@@ -14,6 +14,9 @@ import lombok.*;
 @Getter
 public enum ExceptionEnum {
     FIND_DATA_ISEMPTY(200,"[查询数据为空]"),
+    NO_WORK_ON_WEEKENDS(200,"[双休不上班!]"),
+    SIGNIN_TODAY_FULL(100,"[今日打卡已完成!]"),
+    NOT_SUPPORT_SIGNIN_TIME(100,"[当前时间暂不支持打卡]"),
     PUSH_EXTERNAL_MAIL_FAIL(500,"[外部邮件发送失败]"),
     MAIL_BEACON_STAR_FAIL(500,"[邮件标星无效]"),
     MAIL_BEACON_READY_FAIL(500,"[邮件标记为已读无效]"),

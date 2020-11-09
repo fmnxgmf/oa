@@ -7,6 +7,7 @@ import cn.fmnx.oa.contoller.dept.vo.DeptUserVO;
 import cn.fmnx.oa.contoller.dept.vo.DeptVO;
 import cn.fmnx.oa.contoller.position.vo.PositionIdNameVO;
 import cn.fmnx.oa.entity.dept.Dept;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -37,4 +38,5 @@ public interface DeptMapper extends Mapper<Dept> {
     Integer changeManagerOne(@Param("changeManagerDTO") ChangeManagerDTO changeManagerDTO);
 
     Integer changeManagerTwo(@Param("changeManagerDTO")ChangeManagerDTO changeManagerDTO);
+
 }

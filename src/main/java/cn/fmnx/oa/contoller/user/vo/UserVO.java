@@ -31,7 +31,7 @@ public class UserVO implements Serializable {
     /**
      * 登录用户名
      */
-    @ApiModelProperty(name = "userName",value = "登录用户名")
+        @ApiModelProperty(name = "userName",value = "登录用户名")
     private String userName;
     /**
      * //真实姓名

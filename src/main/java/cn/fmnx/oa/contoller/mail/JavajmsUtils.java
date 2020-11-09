@@ -3,6 +3,7 @@ package cn.fmnx.oa.contoller.mail;
 import cn.fmnx.oa.common.mail.JmsDTO;
 import cn.fmnx.oa.service.upload.impl.UploadServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -33,8 +34,12 @@ public class JavajmsUtils {
         jms.setHost(jmsDTO.getHost());
         jms.setUsername(jmsDTO.getUsername());
         jms.setPassword(jmsDTO.getPassword());
+        jms.setPort(465);
         Properties p = new Properties();
         p.setProperty("mail.smtp.auth", "true");
+        p.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        p.setProperty("mail.smtp.socketFactory.port", "465");
+        p.setProperty("mail.smtp.port", "465");
         jms.setJavaMailProperties(p);
         //建立邮箱消息
         MimeMessage message = jms.createMimeMessage();
@@ -45,12 +50,19 @@ public class JavajmsUtils {
         helper.setSubject(jmsDTO.getSubject());
         helper.setText(jmsDTO.getText(),true);
         String filePath = jmsDTO.getFilePath();
-        File file1 = uploadService.downFile(jmsDTO.getFilePath(), jmsDTO.getAttachmentName());
-        FileSystemResource file = new FileSystemResource(file1);
-        helper.addAttachment(jmsDTO.getAttachmentName(), file);
-       jms.send(message);
-       log.info("邮件投递成功!");
-       return true;
+        if (!StringUtils.isEmpty(jmsDTO.getFilePath())&& !StringUtils.isEmpty(jmsDTO.getAttachmentName())){
+            File file1 = uploadService.downFile(jmsDTO.getFilePath(), jmsDTO.getAttachmentName());
+            FileSystemResource file = new FileSystemResource(file1);
+            helper.addAttachment(jmsDTO.getAttachmentName(), file);
+            jms.send(message);
+            log.info("邮件投递成功!");
+            file1.delete();
+
+        }else {
+            jms.send(message);
+            log.info("邮件投递成功!");
+        }
+        return true;
         } catch (Exception e) {
             e.printStackTrace();
             log.info("邮件投递失败!");

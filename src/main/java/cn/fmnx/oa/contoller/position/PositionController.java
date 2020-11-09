@@ -50,12 +50,7 @@ public class PositionController {
     })
     public ResultModel<PageResult<PositionVO>> findAllPostion(@RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                               @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<PositionVO> pageResult = positionService.findAllPosition(pageDTO);
 
         if (! CollectionUtils.isEmpty(pageResult.getItems())){

@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -32,6 +33,7 @@ import java.util.Map;
  * @Version V1.0
  **/
 @RestController
+@Slf4j
 @Api(tags = "角色管理相关接口")
 public class RoleController {
     @Autowired
@@ -72,12 +74,7 @@ public class RoleController {
     @GetMapping("/findAllRole")
     public ResultModel<PageResult<RoleVO>> findAllRole(@RequestParam(value = "pageNum",required = false) Integer pageNum,
                                                        @RequestParam(value = "pageSize",required = false)Integer pageSize){
-        PageDTO pageDTO ;
-        if(pageNum !=null && pageSize !=null){
-            pageDTO = new PageDTO(pageNum,pageSize);
-        }else {
-            pageDTO = new PageDTO(1,10);
-        }
+        PageDTO pageDTO = new PageDTO(pageNum,pageSize);
         PageResult<RoleVO> pageResult = roleService.finaAllRole(pageDTO);
         if(!CollectionUtils.isEmpty(pageResult.getItems())){
             return ResultModel.ok(pageResult);

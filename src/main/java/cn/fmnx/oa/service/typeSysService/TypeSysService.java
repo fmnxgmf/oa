@@ -1,5 +1,7 @@
 package cn.fmnx.oa.service.typeSysService;
 
+import cn.fmnx.oa.common.page.PageDTO;
+import cn.fmnx.oa.common.page.PageResult;
 import cn.fmnx.oa.contoller.menu.vo.TypeListVO;
 import cn.fmnx.oa.entity.menu.SystemTypeList;
 
@@ -13,7 +15,7 @@ import java.util.List;
  * @Version V1.0
  **/
 public interface TypeSysService {
-    List<TypeListVO> findAllTypeList();
+    PageResult<TypeListVO> findAllTypeList(PageDTO pageDTO);
 
     boolean addTypeList(SystemTypeList typeList);
 

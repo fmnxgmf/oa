@@ -78,12 +78,6 @@ public class RsaUtils {
      * @throws NoSuchAlgorithmException
      */
     public static void generateKey(String publicKeyFilename, String privateKeyFilename, String secret) throws Exception {
-//        String jar_parent = new File(ResourceUtils.getURL("classpath:").getPath())
-//                .getParentFile()
-//                .getParentFile()
-//                .getParent();
-//        publicKeyFilename = jar_parent+ publicKeyFilename;
-//        privateKeyFilename = jar_parent + privateKeyFilename;
         String s = StringUtils.substringBeforeLast(privateKeyFilename, File.separator);
         File file = new File(s);
         if(!file.exists()){
